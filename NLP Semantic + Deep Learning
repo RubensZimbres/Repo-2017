@@ -196,5 +196,8 @@ sentences_neg
 sentences=sentences_neg
 sentences
 
+acc=1-len(np.where([int(i) for i in res]-y_test==0))/len(y_test)
+
 print('ACTUAL SENTIMENT:','\n',p2,'\n')
-print('PREDICTED SENTIMENT:','\n',p)
+print('PREDICTED SENTIMENT:','\n',p,'\n')
+print('Accuracy=',acc)
