@@ -65,7 +65,6 @@ model
 model.most_similar('good')
 model.syn0
 
-#### ERRO AQUI
 sentences.to_array()
 model.docvecs['TRAIN_POS_0']
 
