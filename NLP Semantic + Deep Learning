@@ -1,22 +1,25 @@
 ### DATA FROM KERAS.NLP.zip
 
-from gensim import utils
-from gensim.models.doc2vec import LabeledSentence
-from gensim.models import Doc2Vec
-import numpy as np
-from random import shuffle
 import matplotlib.pyplot as plt
 import pandas as pd
+import numpy as np
+import keras
 from keras.models import Sequential
 from keras.layers import Dense, Dropout, Activation
 from keras.optimizers import SGD
+from keras.wrappers.scikit_learn import KerasRegressor
+from scipy.interpolate import spline
 from keras.callbacks import LearningRateScheduler
+from sklearn.preprocessing import StandardScaler
+from sklearn import preprocessing
 from bs4 import BeautifulSoup
 import nltk
 from nltk import sent_tokenize, word_tokenize, pos_tag
+from gensim import utils
+from gensim.models.doc2vec import LabeledSentence
+from gensim.models import Doc2Vec
+from random import shuffle
 
-
-### TEXT AND SENTENCES CLASSIFICATION
 class LabeledLineSentence(object):
     def __init__(self, sources):
         self.sources = sources
@@ -61,14 +64,12 @@ for epoch in range(10):
 model.save('./imdb.d2v')
 
 model = Doc2Vec.load('./imdb.d2v')
-model
 model.most_similar('good')
 model.syn0
 
 sentences.to_array()
 model.docvecs['TRAIN_POS_0']
 
-### LABELING SENTENCES
 train_arrays = numpy.zeros((14, 10))
 train_labels = numpy.zeros(14)
 
@@ -90,8 +91,6 @@ for i in range(7):
     test_labels[i] = 1
     test_labels[1 + i] = 0
 
-
-### NEURAL NET
 sd=[]
 class LossHistory(keras.callbacks.Callback):
     def on_train_begin(self, logs={}):
@@ -107,11 +106,11 @@ learning_rate = 0.06
 decay_rate = 5e-6
 momentum = 0.9
 
-model2=Sequential()
-model2.add(Dense(12, input_dim=10, init='uniform'))
-model2.add(Dense(1, init='uniform'))
+model=Sequential()
+model.add(Dense(12, input_dim=10, init='uniform'))
+model.add(Dense(1, init='uniform'))
 sgd = SGD(lr=learning_rate,momentum=momentum, decay=decay_rate, nesterov=False)
-model2.compile(loss='mean_squared_error',optimizer=sgd,metrics=['mean_absolute_error'])
+model.compile(loss='mean_squared_error',optimizer=sgd,metrics=['mean_absolute_error'])
 
 def step_decay(losses):
     if float(2*np.sqrt(np.array(history.losses[-1])))<0.23:
@@ -128,14 +127,16 @@ y_train=train_labels
 X_test=test_arrays
 y_test=test_labels        
 
+##### SEM STANDAR SCALER
+
 history=LossHistory()
 lrate=LearningRateScheduler(step_decay)
 
-model2.fit(X_train,y_train,nb_epoch=epochs,callbacks=[history,lrate],verbose=1)
+model.fit(X_train,y_train,nb_epoch=epochs,callbacks=[history,lrate],verbose=1)
 
 DERIVATIVE_MIN=min(np.array(2*np.sqrt(history.losses)))
 
-res = model2.predict(X_test)
+res = model.predict(X_test)
 
 for i in range(0,len(res)):
     if res[i]>.5:
@@ -167,24 +168,33 @@ texto=[]
 for string in soup.stripped_strings:
     texto.append(repr(string))
 
-for script in soup(["script", "style"]):
-    script.extract()  
+texto
 
+# kill all script and style elements
+for script in soup(["script", "style"]):
+    script.extract()    # rip it out
+
+# get text
 text2 = soup.get_text()
+text2
 
 sentences_pos = sent_tokenize(text2)
+sentences_pos
 
 filename = "test-neg2.txt"
 raw_text2 = open(filename).read()
 html=raw_text2
 soup2 = BeautifulSoup(html,"lxml")
+html
 
+# get text
 text2 = soup2.get_text()
+text2
 sentences_neg = sent_tokenize(text2)
 sentences_neg
 
 sentences=sentences_neg
+sentences
 
-print('ACTUAL SENTIMENT:','\n',p2[7:14],'\n')
-print('PREDICTED SENTIMENT:','\n',p[7:14],'\n')
-print('Minimum Derivative',DERIVATIVE_MIN)
+print('ACTUAL SENTIMENT:','\n',p2,'\n')
+print('PREDICTED SENTIMENT:','\n',p)
