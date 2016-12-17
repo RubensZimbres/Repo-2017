@@ -127,8 +127,6 @@ y_train=train_labels
 X_test=test_arrays
 y_test=test_labels        
 
-##### SEM STANDAR SCALER
-
 history=LossHistory()
 lrate=LearningRateScheduler(step_decay)
 
@@ -170,11 +168,9 @@ for string in soup.stripped_strings:
 
 texto
 
-# kill all script and style elements
 for script in soup(["script", "style"]):
     script.extract()    # rip it out
 
-# get text
 text2 = soup.get_text()
 text2
 
@@ -187,7 +183,6 @@ html=raw_text2
 soup2 = BeautifulSoup(html,"lxml")
 html
 
-# get text
 text2 = soup2.get_text()
 text2
 sentences_neg = sent_tokenize(text2)
