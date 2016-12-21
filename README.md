@@ -5,4 +5,6 @@ Experiments in NLP, Deep Learning, Reinforcement Learning and Artificial Intelli
 
 <b> Lasagne Neural Nets + Weights </b> is a Neural Network model based in Theano and Lasagne, where is possible to visualize weights between X1 and X2 to hidden layer. Can also be adapted to visualize weights between hidden layer and output. It uses the DadosTeseLogit.csv sample file.
 
+<b> Lasagne Neural Nets Regression </b> is a Neural Network model based in Theano and Lasagne, that makes a linear regression with a continuous target variable and reaches 99.4% accuracy. It uses the DadosTeseLogit.csv sample file.
+
 <b> Other files to be added. </b>
