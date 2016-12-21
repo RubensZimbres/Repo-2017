@@ -7,4 +7,6 @@ Experiments in NLP, Deep Learning, Reinforcement Learning and Artificial Intelli
 
 <b> Lasagne Neural Nets Regression </b> is a Neural Network model based in Theano and Lasagne, that makes a linear regression with a continuous target variable and reaches 99.4% accuracy. It uses the DadosTeseLogit.csv sample file.
 
+<b> Neural Networks for Regression </b> shows multiple solutions for a regression problem, solved with sklearn, Keras, Theano and Lasagne. It uses the Boston dataset sample file from sklearn and reaches more than 98% accuracy.
+
 <b> Other files to be added. </b>
