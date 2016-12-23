@@ -13,4 +13,6 @@ Experiments in NLP, Deep Learning, Reinforcement Learning and Artificial Intelli
 
 <b> NLP Sentiment Positive </b> is a model that identifies website content as positive, neutral or negative using BeautifulSoup and NLTK libraries, plotting the results.
 
+<b> Multinomial Regression </b> is a regression model where target variable has 3 classes.
+
 <b> Other files to be added. </b>
