@@ -73,3 +73,26 @@ barh(pos,data, align='center',alpha=0.7,color='rgy')
 yticks(pos, ['NEGATIVE','NEUTRAL','POSITIVE'])
 xlabel('TONE OF SENTENCES')
 title(soup.title.string)
+
+### OUTPUT
+
+compound: -0.5574, neg: 0.324, neu: 0.549, pos: 0.126, 
+compound: 0.0, neg: 0.0, neu: 1.0, pos: 0.0, 
+compound: -0.4215, neg: 0.203, neu: 0.797, pos: 0.0, 
+compound: -0.3182, neg: 0.365, neu: 0.635, pos: 0.0, 
+compound: 0.5106, neg: 0.0, neu: 0.82, pos: 0.18, 
+compound: -0.4767, neg: 0.307, neu: 0.693, pos: 0.0, 
+compound: -0.5473, neg: 0.202, neu: 0.798, pos: 0.0, 
+compound: -0.8516, neg: 0.157, neu: 0.843, pos: 0.0, 
+compound: 0.4767, neg: 0.104, neu: 0.664, pos: 0.232, 
+compound: 0.0, neg: 0.0, neu: 1.0, pos: 0.0, 
+compound: 0.5106, neg: 0.0, neu: 0.87, pos: 0.13, 
+compound: 0.0, neg: 0.0, neu: 1.0, pos: 0.0, 
+compound: 0.0, neg: 0.0, neu: 1.0, pos: 0.0, 
+compound: 0.0, neg: 0.0, neu: 1.0, pos: 0.0, 
+compound: 0.0, neg: 0.0, neu: 1.0, pos: 0.0, 
+compound: 0.9716, neg: 0.031, neu: 0.672, pos: 0.297, 
+compound: 0.3182, neg: 0.0, neu: 0.753, pos: 0.247, 
+compound: 0.2905, neg: 0.0, neu: 0.734, pos: 0.266, 
+compound: 0.0, neg: 0.0, neu: 1.0, pos: 0.0, 
+compound: 0.9943, neg: 0.0, neu: 0.74, pos: 0.26, 
