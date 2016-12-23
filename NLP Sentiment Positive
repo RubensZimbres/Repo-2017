@@ -1,0 +1,75 @@
+import urllib
+from bs4 import BeautifulSoup
+import nltk
+import numpy as np
+from nltk import sent_tokenize, word_tokenize, pos_tag
+import matplotlib.pyplot as plt
+from pylab import *
+from nltk.corpus import subjectivity
+from nltk.sentiment import SentimentAnalyzer
+from nltk.sentiment.util import *
+
+url="http://www.infowars.com"
+html = urllib.request.urlopen(url).read()
+soup = BeautifulSoup(html)
+
+texto=[]
+for string in soup.stripped_strings:
+    texto.append(repr(string))
+
+texto
+
+text = soup.get_text()
+text
+
+chars_to_remove = ["\t","\n"]
+sc = set(chars_to_remove)
+text=''.join([c for c in text if c not in sc])
+text
+
+sentences = sent_tokenize(text)
+sentences2=sentences
+sentences2
+
+tokens = word_tokenize(text)
+tokens
+
+from nltk.sentiment.vader import SentimentIntensityAnalyzer as sia
+sentim=sia()
+
+cc=[]
+for sentence in sentences2:
+    cc.append(sentim.polarity_scores(sentence))
+len(cc)
+len(sentences2)
+cc[0]
+
+neu=[]
+neg=[]
+for sentence in sentences2:
+        ss = sentim.polarity_scores(sentence)
+        for k in sorted(ss):
+            print('{0}: {1}, '.format(k, ss[k]), end='')
+            neg.append(ss[k])
+            neu.append(k)
+        print()
+        print('\n')
+
+f=int(len(neg)/4)
+sent0=np.array(neu).reshape(f,4)
+sent=np.array(neg).reshape(f,4)
+
+comp=sent.T[0]
+
+neutro=len(np.where(comp==0)[0])
+positivo=len(np.where(comp>0)[0])
+negativo=len(np.where(comp<0)[0])
+
+data=[negativo,neutro,positivo]
+
+pos = arange(3)
+plt.figure(figsize=(7,4))
+barh(pos,data, align='center',alpha=0.7,color='rgy')
+yticks(pos, ['NEGATIVE','NEUTRAL','POSITIVE'])
+xlabel('TONE OF SENTENCES')
+title(soup.title.string)
