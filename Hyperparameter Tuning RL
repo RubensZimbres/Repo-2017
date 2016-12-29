@@ -33,6 +33,7 @@ x_train,y_train=dataset.data,dataset.target
 a=pd.DataFrame(x_train)
 a.dropna()
 
+### Feature selection
 c=[]
 for i in range(0,x_train.shape[1]):
     c.append(np.corrcoef(x_train.T[i],y_train)[0][1])
@@ -43,10 +44,7 @@ for i in d:
     e.append(x_train.T[i])
 x=e[0].T
 
-z=[]
-for i in range(0,2):
-    z.append(np.where(x.T[i]<2*np.std(x.T[i])))
-
+## Remove outliers
 z2=[]
 z2.append(np.where(y_train.T<np.mean(y_train.T)+2*np.std(y_train.T)))
 z2[0][0]
