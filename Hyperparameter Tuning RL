@@ -166,3 +166,41 @@ while acc-pp[-2]>0.0001:
             time.sleep(1)
             print('.', end='', flush=True)  
 model.summary()
+
+### OUTPUT
+
+learning rate: 0.001
+derivative of loss: 0.220770262037
+0s - loss: 0.0122 - mean_absolute_error: 0.0825
+Epoch 299/300
+learning rate: 0.001
+derivative of loss: 0.220748450555
+0s - loss: 0.0122 - mean_absolute_error: 0.0825
+Epoch 300/300
+learning rate: 0.001
+derivative of loss: 0.22072300209
+0s - loss: 0.0122 - mean_absolute_error: 0.0825
+300/370 [=======================>......] - ETA: 0s
+
+ Number of Hidden Layers: 1
+
+ Number of Hidden Nodes: 4
+
+ Accuracy on Training: 0.917522253116
+
+ Improvement: -0.00210045750898
+
+ Accuracy on test set: 0.879107174837
+
+ New configuration on its way.......
+____________________________________________________________________________________________________
+Layer (type)                     Output Shape          Param #     Connected to                     
+====================================================================================================
+dense_431 (Dense)                (None, 4)             16          dense_input_212[0][0]            
+____________________________________________________________________________________________________
+dense_432 (Dense)                (None, 1)             5           dense_431[0][0]                  
+____________________________________________________________________________________________________
+activation_116 (Activation)      (None, 1)             0           dense_432[0][0]                  
+====================================================================================================
+Total params: 21
+____________________________________________________________________________________________________
