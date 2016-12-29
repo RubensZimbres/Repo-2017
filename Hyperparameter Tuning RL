@@ -120,6 +120,9 @@ while acc-pp[-2]>0.0001:
     lrate=LearningRateScheduler(step_decay)
 
 ##### NEURAL NETWORK INITIAL SETTINGS
+
+## If configuration is OK, train for more epochs to converge
+
     if reward>.87:
         epochs = 800
     else:
