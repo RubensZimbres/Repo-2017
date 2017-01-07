@@ -3,6 +3,8 @@ Experiments in NLP, Deep Learning, Reinforcement Learning and Artificial Intelli
 
 <b> Autoencoder for Audio </b> is a model where I compressed an audio file and used Autoencoder to reconstruct the audio file, for use in phoneme classification.
 
+<b> Convolutional NN Lasagne </b> is a Convolutional Neural Network model in Lasagne to solve the MNIST task.
+
 <b> Hyperparameter Tuning RL </b> is a model where hyperparameters of Neural Networks are adjusted via Reinforcement Learning. According to a reward, hyperparameter tuning (environment) is changed through a policy (mechanization of knowledge) using the Boston Dataset. Hyperparameters tuned are: learning rate, epochs, decay, momentum, number of hidden layers and nodes and initial weights.
 
 <b> Lasagne Neural Nets Regression </b> is a Neural Network model based in Theano and Lasagne, that makes a linear regression with a continuous target variable and reaches 99.4% accuracy. It uses the DadosTeseLogit.csv sample file.
