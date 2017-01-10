@@ -21,4 +21,6 @@ Experiments in NLP, Deep Learning, Reinforcement Learning and Artificial Intelli
 
 <b> NLP Sentiment Positive </b> is a model that identifies website content as positive, neutral or negative using BeautifulSoup and NLTK libraries, plotting the results.
 
+<b> Text-to-Speech </b> is a .py file where Python speaks any given text and saves it as an audio .wav file.
+
 <b> More files to be added. </b>
