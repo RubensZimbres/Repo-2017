@@ -8,7 +8,7 @@ text2
 
 ### TEXT-TO-SPEECH: SPEAKS THE DOCUMENT
 
-os.system("say"+ text2) 
+os.system('say'+ text2) 
 
 ### EXPORTS THE SPOKEN TEXT AS WAV FILE
 
