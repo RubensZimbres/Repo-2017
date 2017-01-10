@@ -114,10 +114,10 @@ plt.axhline(0, color='black')
 plt.xticks(rotation=0)
 plt.show()
 
-ss=params[0].get_value().T[1]
+ss2=params[0].get_value().T[1]
 
-s = pd.Series(
-    ss,
+s2 = pd.Series(
+    ss2,
     index = ["Node 1", "Node 2", "Node 3", "Node 4"]
 )
 
@@ -128,7 +128,7 @@ ax = plt.gca()
 ax.tick_params(axis='x', colors='black')
 ax.tick_params(axis='y', colors='black')
 my_colors = 'rgby' 
-s.plot( kind='bar', color=my_colors)
+s2.plot( kind='bar', color=my_colors)
 plt.axhline(0, color='black')
 plt.xticks(rotation=0)
 plt.show()
@@ -144,5 +144,3 @@ Weights Hidden Nodes
  [ 0.13120215  0.19968873]
  [ 0.56122197  0.04298479]
  [-0.42349583 -0.19503986]] 
-
-Weoghts Bias [ 0.  0.]
