@@ -1,5 +1,8 @@
-# Experiments
+# Python Experiments
+
 Experiments in NLP, Deep Learning, Reinforcement Learning and Artificial Intelligence
+
+<b> Outputs of the models can be seen at my portfolio: </b> http://www.slideshare.net/RubensZimbres/portfolio-78-en-2017
 
 <b> Autoencoder for Audio </b> is a model where I compressed an audio file and used Autoencoder to reconstruct the audio file, for use in phoneme classification.
 
@@ -21,8 +24,6 @@ Experiments in NLP, Deep Learning, Reinforcement Learning and Artificial Intelli
 
 <b> NLP Semantic Doc2Vec + Neural Network </b> is a model where positive and negative movie reviews were extracted and semantically classified with NLTK and BeautifulSoup, then labeled as positive or negative. Text was then used as an input for the Neural Network model training. After training, new sentences are entered in the Keras Neural Network model and then classified. It uses the zip file.
 
-<b> NLP Sentiment Positive </b> is a model that identifies website content as positive, neutral or negative using BeautifulSoup and NLTK libraries, plotting the results.
+<b> NLP Sentiment Positive </b> is a model that identifies website content as positive, neutral or negative using BeautifulSoup and NLTK libraries, plotting the results. 
 
 <b> Text-to-Speech </b> is a .py file where Python speaks any given text and saves it as an audio .wav file.
-
-<b> More files to be added. </b>
