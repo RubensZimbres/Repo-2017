@@ -36,11 +36,13 @@ column=np.where(np.array(d)>0)[0][0]
 row=d[column][0]
 subset=aa[:row+1]
 
+minim=min(np.where(aa[[3]]==3)[0])
+maxim=max(np.where(aa[[3]]==3)[0])+1
 b=aa.fillna(0)
-col=np.array(b[[2]][0:6]).T
+col=np.array(b[[2]][minim:maxim]).T
 row_=np.array(b)
-selected_rows=row_[0:6]
-row_calculation=row_[4]
+selected_rows=row_[minim:maxim]
+row_calculation=row_[row]
 
 ab=[]
 for i in range(0,6):
