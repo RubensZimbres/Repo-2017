@@ -2,7 +2,13 @@
 
 Experiments in NLP, Deep Learning, Reinforcement Learning and Artificial Intelligence
 
+<b> Welcome to my GitHub repo. </b>
+
+I am a Data Scientist and I code in R, Python and Wolfram Mathematica. Here you will find some Machine Learning, Deep Learning, Natural Language Processing and Artificial Intelligence models I developed.
+
 <b> Outputs of the models can be seen at my portfolio: </b> http://www.slideshare.net/RubensZimbres/portfolio-78-en-2017
+
+------------------
 
 <b> Autoencoder for Audio </b> is a model where I compressed an audio file and used Autoencoder to reconstruct the audio file, for use in phoneme classification.
 
