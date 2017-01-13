@@ -1,8 +1,12 @@
 '''ENSEMBLED MACHINE LEARNING WITH HYPERPARAMETER TUNING FOR CLASSIFICATION TASK 
 IRIS DATASET - 3 CLASSES - 7 MACHINE LEARNING ALGORITHMS'''
 
+'''ENSEMBLED MACHINE LEARNING WITH HYPERPARAMETER TUNING
+FOR CLASSIFICATION TASK - 7 ML ALGORITHMS'''
+
 import pandas as pd
 import numpy as np
+import matplotlib.pyplot as plt
 from sklearn import datasets
 iris = datasets.load_iris()
 x = iris.data[:, 2:][0:140]
@@ -15,7 +19,7 @@ y_test = iris.target[141:150]
 from sklearn.naive_bayes import GaussianNB
 model=GaussianNB()
 model.fit(x,y)
-model.score(x,y)
+nb=model.score(x,y)
 
 pred=model.predict(x_test)
 sum(x==0 for x in pred-y_test)/len(pred)
@@ -37,7 +41,7 @@ random_state= None,
 splitter= 'best')
 
 model.fit(x,y)
-model.score(x,y)
+dt=model.score(x,y)
 pred=model.predict(x_test)
 sum(x==0 for x in pred-y_test)/len(pred)
 
@@ -62,7 +66,7 @@ verbose=1,
 warm_start= False)
 
 model.fit(x,y)
-model.score(x,y)
+boo=model.score(x,y)
 pred=model.predict(x_test)
 sum(x==0 for x in pred-y_test)/len(pred)
 
@@ -80,7 +84,7 @@ p= 2,
 weights= 'uniform')
 
 model.fit(x,y)
-model.score(x,y)
+knn=model.score(x,y)
 pred=model.predict(x_test)
 sum(x==0 for x in pred-y_test)/len(pred)
 
@@ -104,7 +108,7 @@ verbose= 1,
 warm_start= False)
 
 model.fit(x,y)
-model.score(x,y)
+log=model.score(x,y)
 pred=model.predict(x_test)
 sum(x==0 for x in pred-y_test)/len(pred)
 
@@ -128,7 +132,7 @@ tol= 0.001,
 verbose=1)
 
 model.fit(x,y)
-model.score(x,y)
+svm_=model.score(x,y)
 pred=model.predict(x_test)
 sum(x==0 for x in pred-y_test)/len(pred)
 
@@ -153,6 +157,36 @@ verbose= 1,
 warm_start=True)
  
 model.fit(x,y)
-model.score(x,y)
+rand=model.score(x,y)
 pred=model.predict(x_test)
 sum(x==0 for x in pred-y_test)/len(pred)
+
+ss2=[nb,dt,boo,knn,log,svm_,rand]
+algos=["NaiveB", "DecisionTree", "Boost", "KNN","Logist","SVM","Rand Forest"]
+
+best=[int(i) for i in np.where(ss2==max(ss2))[0]]
+best2=[]
+for i in best:
+    best2.append([algos[i],round(ss2[i],4)])
+
+s2 = pd.Series(
+    ss2,
+    index = ["NaiveB", "DecisionTree", "Boost", "KNN","Logist","SVM","Rand Forest"]
+)
+plt.figure(figsize=(9,6))
+plt.title("ENSEMBLED MACHINE LEARNING - IRIS CLASSIFICATION TASK")
+plt.ylabel('MODEL SCORE')
+plt.xlabel('MODEL TYPE')
+ax = plt.gca()
+ax.tick_params(axis='x', colors='black')
+ax.tick_params(axis='y', colors='black')
+for i in range(0,len(algos)):
+    ax.text(i,ss2[i],round(ss2[i],4),ha='center', va='bottom')
+my_colors = 'rgbcmyk'
+s2.plot( kind='bar', color=my_colors)
+plt.axhline(0, color='black')
+plt.xticks(rotation=0)
+plt.ylim(.85,1)
+plt.show()
+
+print('BEST MODELS:',best2)
