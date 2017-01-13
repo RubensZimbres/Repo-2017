@@ -1,15 +1,14 @@
-'''ENSEMBLED MACHINE LEARNING WITH HYPERPARAMETER TUNING FOR CLASSIFICATION TASK - 3 CLASSES - 7 MACHINE LEARNING ALGORITHMS'''
+'''ENSEMBLED MACHINE LEARNING WITH HYPERPARAMETER TUNING FOR CLASSIFICATION TASK 
+IRIS DATASET - 3 CLASSES - 7 MACHINE LEARNING ALGORITHMS'''
 
 import pandas as pd
 import numpy as np
-
-df=pd.read_csv('DadosTeseLogit3.csv',sep=',',header=0)
-data=np.array(df)
-x0=np.transpose(data)
-x1=np.reshape([[float(i) for i in x0[18]],[float(i) for i in x0[23]]],(98,2))
-x=x1[21:98]
-y=[float(i) for i in np.array(df[[30]])][21:98]
-y_test=[float(i) for i in np.array(df[[30]])][0:20]
+from sklearn import datasets
+iris = datasets.load_iris()
+x = iris.data[:, 2:][0:140]
+y = iris.target[0:140]
+x_test = iris.data[:, 2:][141:150]
+y_test = iris.target[141:150]
 
 '''NAIVE BAYES'''
 
@@ -18,14 +17,12 @@ model=GaussianNB()
 model.fit(x,y)
 model.score(x,y)
 
-x_test=x1[0:20]
 pred=model.predict(x_test)
 sum(x==0 for x in pred-y_test)/len(pred)
 
 '''DECISION TREES'''
 
 from sklearn import tree
-
 model=tree.DecisionTreeClassifier(
 class_weight= None,
 criterion= 'entropy',
@@ -41,14 +38,12 @@ splitter= 'best')
 
 model.fit(x,y)
 model.score(x,y)
-x_test=x1[0:20]
 pred=model.predict(x_test)
 sum(x==0 for x in pred-y_test)/len(pred)
 
 '''BOOSTING'''
 
 from sklearn.ensemble import GradientBoostingClassifier
-
 model=GradientBoostingClassifier(
 init= None,
 learning_rate= 0.6,
@@ -68,14 +63,12 @@ warm_start= False)
 
 model.fit(x,y)
 model.score(x,y)
-x_test=x1[0:20]
 pred=model.predict(x_test)
 sum(x==0 for x in pred-y_test)/len(pred)
 
 '''K NEAREST NEIGHBOR'''
 
 from sklearn.neighbors import KNeighborsClassifier
-
 model=KNeighborsClassifier(
 n_neighbors=3,
 algorithm= 'auto',
@@ -88,14 +81,12 @@ weights= 'uniform')
 
 model.fit(x,y)
 model.score(x,y)
-x_test=x1[0:20]
 pred=model.predict(x_test)
 sum(x==0 for x in pred-y_test)/len(pred)
 
 '''MULTINOMIAL LOGISTIC REGRESSION'''
 
 from sklearn.linear_model import LogisticRegression
-
 model=LogisticRegression(
 C= 1.0,
 class_weight= None,
@@ -114,14 +105,12 @@ warm_start= False)
 
 model.fit(x,y)
 model.score(x,y)
-x_test=x1[0:20]
 pred=model.predict(x_test)
 sum(x==0 for x in pred-y_test)/len(pred)
 
 '''SUPPORT VECTOR MACHINES'''
 
 from sklearn import svm
-
 model=svm.SVC(
 C= 1.0,
 cache_size= 10,
@@ -140,14 +129,12 @@ verbose=1)
 
 model.fit(x,y)
 model.score(x,y)
-x_test=x1[0:20]
 pred=model.predict(x_test)
 sum(x==0 for x in pred-y_test)/len(pred)
 
 '''RANDOM FORESTS'''
 
 from sklearn.ensemble import RandomForestClassifier
-
 model=RandomForestClassifier(
 bootstrap= True,
 class_weight= None,
@@ -167,6 +154,5 @@ warm_start=True)
  
 model.fit(x,y)
 model.score(x,y)
-x_test=x1[0:20]
 pred=model.predict(x_test)
 sum(x==0 for x in pred-y_test)/len(pred)
