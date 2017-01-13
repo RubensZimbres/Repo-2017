@@ -1,9 +1,6 @@
 '''ENSEMBLED MACHINE LEARNING WITH HYPERPARAMETER TUNING FOR CLASSIFICATION TASK 
 IRIS DATASET - 3 CLASSES - 7 MACHINE LEARNING ALGORITHMS'''
 
-'''ENSEMBLED MACHINE LEARNING WITH HYPERPARAMETER TUNING
-FOR CLASSIFICATION TASK - 7 ML ALGORITHMS'''
-
 import pandas as pd
 import numpy as np
 import matplotlib.pyplot as plt
@@ -189,4 +186,4 @@ plt.xticks(rotation=0)
 plt.ylim(.85,1)
 plt.show()
 
-print('BEST MODELS:',best2)
+print('BEST MODELS:',best2) 
