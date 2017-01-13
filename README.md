@@ -33,3 +33,5 @@ I am a Data Scientist and I code in R, Python and Wolfram Mathematica. Here you 
 <b> NLP Sentiment Positive </b> is a model that identifies website content as positive, neutral or negative using BeautifulSoup and NLTK libraries, plotting the results. 
 
 <b> Text-to-Speech </b> is a .py file where Python speaks any given text and saves it as an audio .wav file.
+
+<b> Variational Autoencoder </b> is a VAE made with Keras.
