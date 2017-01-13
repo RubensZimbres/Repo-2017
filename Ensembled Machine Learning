@@ -1,0 +1,172 @@
+'''ENSEMBLED MACHINE LEARNING WITH HYPERPARAMETER TUNING FOR CLASSIFICATION TASK - 3 CLASSES - 7 MACHINE LEARNING ALGORITHMS'''
+
+import pandas as pd
+import numpy as np
+
+df=pd.read_csv('DadosTeseLogit3.csv',sep=',',header=0)
+data=np.array(df)
+x0=np.transpose(data)
+x1=np.reshape([[float(i) for i in x0[18]],[float(i) for i in x0[23]]],(98,2))
+x=x1[21:98]
+y=[float(i) for i in np.array(df[[30]])][21:98]
+y_test=[float(i) for i in np.array(df[[30]])][0:20]
+
+'''NAIVE BAYES'''
+
+from sklearn.naive_bayes import GaussianNB
+model=GaussianNB()
+model.fit(x,y)
+model.score(x,y)
+
+x_test=x1[0:20]
+pred=model.predict(x_test)
+sum(x==0 for x in pred-y_test)/len(pred)
+
+'''DECISION TREES'''
+
+from sklearn import tree
+
+model=tree.DecisionTreeClassifier(
+class_weight= None,
+criterion= 'entropy',
+max_depth= 20,
+max_features= x.shape[1],
+max_leaf_nodes= 4,
+min_samples_leaf= 1,
+min_samples_split= 1,
+min_weight_fraction_leaf= 0.0,
+presort= False,
+random_state= None,
+splitter= 'best')
+
+model.fit(x,y)
+model.score(x,y)
+x_test=x1[0:20]
+pred=model.predict(x_test)
+sum(x==0 for x in pred-y_test)/len(pred)
+
+'''BOOSTING'''
+
+from sklearn.ensemble import GradientBoostingClassifier
+
+model=GradientBoostingClassifier(
+init= None,
+learning_rate= 0.6,
+loss= 'deviance',
+max_depth= 5,
+max_features= x.shape[1],
+max_leaf_nodes= 4,
+min_samples_leaf= 1,
+min_samples_split= 1,
+min_weight_fraction_leaf= 0.0,
+n_estimators= 1000,
+presort= 'auto',
+random_state= None,
+subsample= 1.0,
+verbose=1,
+warm_start= False)
+
+model.fit(x,y)
+model.score(x,y)
+x_test=x1[0:20]
+pred=model.predict(x_test)
+sum(x==0 for x in pred-y_test)/len(pred)
+
+'''K NEAREST NEIGHBOR'''
+
+from sklearn.neighbors import KNeighborsClassifier
+
+model=KNeighborsClassifier(
+n_neighbors=3,
+algorithm= 'auto',
+leaf_size= 30,
+metric= 'minkowski',
+metric_params= None,
+n_jobs= 1,
+p= 2,
+weights= 'uniform')
+
+model.fit(x,y)
+model.score(x,y)
+x_test=x1[0:20]
+pred=model.predict(x_test)
+sum(x==0 for x in pred-y_test)/len(pred)
+
+'''MULTINOMIAL LOGISTIC REGRESSION'''
+
+from sklearn.linear_model import LogisticRegression
+
+model=LogisticRegression(
+C= 1.0,
+class_weight= None,
+dual= False,
+fit_intercept= True,
+intercept_scaling= 1,
+max_iter= 50000,
+multi_class= 'multinomial',
+n_jobs= 2,
+penalty= 'l2',
+random_state= None,
+solver= 'newton-cg',
+tol= 0.0001,
+verbose= 1,
+warm_start= False)
+
+model.fit(x,y)
+model.score(x,y)
+x_test=x1[0:20]
+pred=model.predict(x_test)
+sum(x==0 for x in pred-y_test)/len(pred)
+
+'''SUPPORT VECTOR MACHINES'''
+
+from sklearn import svm
+
+model=svm.SVC(
+C= 1.0,
+cache_size= 10,
+class_weight= None,
+coef0= 0.0,
+decision_function_shape= None,
+degree= 3,
+gamma= 100,
+kernel= 'rbf',
+max_iter= -1,
+probability= True,
+random_state= None,
+shrinking= True,
+tol= 0.001,
+verbose=1)
+
+model.fit(x,y)
+model.score(x,y)
+x_test=x1[0:20]
+pred=model.predict(x_test)
+sum(x==0 for x in pred-y_test)/len(pred)
+
+'''RANDOM FORESTS'''
+
+from sklearn.ensemble import RandomForestClassifier
+
+model=RandomForestClassifier(
+bootstrap= True,
+class_weight= None,
+criterion= 'gini',
+max_depth= 100,
+max_features=x.shape[1],
+max_leaf_nodes=100,
+min_samples_leaf= 1,
+min_samples_split= 1,
+min_weight_fraction_leaf= 0,
+n_estimators= 100,
+n_jobs= 1,
+oob_score= False,
+random_state= None,
+verbose= 1,
+warm_start=True)
+ 
+model.fit(x,y)
+model.score(x,y)
+x_test=x1[0:20]
+pred=model.predict(x_test)
+sum(x==0 for x in pred-y_test)/len(pred)
