@@ -16,6 +16,8 @@ I am a Data Scientist and I code in R, Python and Wolfram Mathematica. Here you 
 
 <b> Convolutional NN Lasagne </b> is a Convolutional Neural Network model in Lasagne to solve the MNIST task.
 
+<b> Ensembled Machine Learning </b> is a .py file where 7 Machine Learning algorithms are used in a classification task with 3 classes and all possible hyperparameters of each algorithm are adjusted.
+
 <b> Hyperparameter Tuning RL </b> is a model where hyperparameters of Neural Networks are adjusted via Reinforcement Learning. According to a reward, hyperparameter tuning (environment) is changed through a policy (mechanization of knowledge) using the Boston Dataset. Hyperparameters tuned are: learning rate, epochs, decay, momentum, number of hidden layers and nodes and initial weights.
 
 <b> Lasagne Neural Nets Regression </b> is a Neural Network model based in Theano and Lasagne, that makes a linear regression with a continuous target variable and reaches 99.4% accuracy. It uses the DadosTeseLogit.csv sample file.
