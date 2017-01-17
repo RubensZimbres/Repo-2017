@@ -36,4 +36,6 @@ I am a Data Scientist and I code in R, Python and Wolfram Mathematica. Here you 
 
 <b> Text-to-Speech </b> is a .py file where Python speaks any given text and saves it as an audio .wav file.
 
+<b> Time Series Prediction with Neural Networks - Keras </b> is a Neural Network model to forecast time series, using Keras with an adaptive learning rate depending upon derivative of loss.
+
 <b> Variational Autoencoder </b> is a VAE made with Keras.
