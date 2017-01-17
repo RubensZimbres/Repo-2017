@@ -1,6 +1,6 @@
-# Python Experiments
+# Python Codes
 
-Experiments in NLP, Deep Learning, Reinforcement Learning and Artificial Intelligence
+Codes in NLP, Deep Learning, Reinforcement Learning and Artificial Intelligence
 
 <b> Welcome to my GitHub repo. </b>
 
