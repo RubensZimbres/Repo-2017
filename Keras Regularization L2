@@ -5,7 +5,6 @@ import keras
 from keras.models import Sequential
 from keras.layers import Dense, Dropout, Activation
 from keras.optimizers import SGD
-from keras.wrappers.scikit_learn import KerasRegressor
 from sklearn.preprocessing import StandardScaler
 from keras.regularizers import l2, activity_l2
 from scipy.interpolate import spline
