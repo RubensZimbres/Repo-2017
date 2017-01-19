@@ -10,22 +10,18 @@ from sklearn.preprocessing import StandardScaler
 from keras.regularizers import l2, activity_l2
 from scipy.interpolate import spline
 
-reg=0.007
-reg2=0.007
+reg=0.02
+reg2=0.02
 
-def base_model():
-    model=Sequential()
-    model.add(Dense(4, input_dim=2, init='uniform',W_regularizer=l2(reg), activity_regularizer=activity_l2(reg2)))
-    model.add(Dense(1, init='uniform',W_regularizer=l2(reg), activity_regularizer=activity_l2(reg2)))
-    sgd = SGD(lr=0.06, decay=2e-5, momentum=0.9, nesterov=True)
-    model.compile(loss='mean_squared_error',optimizer=sgd,metrics=['mean_absolute_error'])
-    return model
+model=Sequential()
+model.add(Dense(4, input_dim=2, init='uniform',W_regularizer=l2(reg), activity_regularizer=activity_l2(reg2)))
+model.add(Dense(1, init='uniform',W_regularizer=l2(reg), activity_regularizer=activity_l2(reg2)))
+sgd = SGD(lr=0.06, decay=2e-5, momentum=0.9, nesterov=True)
+model.compile(loss='mean_squared_error',optimizer=sgd,metrics=['mean_absolute_error'])
 
 aa=pd.read_csv('GameR.csv',sep=',',header=0)
 df=aa[0:2100]
 df
-df2=aa[2101:2300]
-df2
 y=np.array(df[[2]])
 y_train=[item for sublist in y for item in sublist]
 y_train=np.array(y_train)
@@ -38,11 +34,11 @@ x3=np.array(x2).T
 X_train=x3
 X_train.shape
 
-y2=np.array(df2[[2]])
+y2=np.array(df[[2]])
 y_train2=[item for sublist in y2 for item in sublist]
 y_test=np.array(y_train2)
 
-x0=np.array(df2)
+x0=np.array(df)
 x10=x0.T
 x20=[x10[0],x10[1]]
 x30=np.array(x20).T
@@ -54,9 +50,8 @@ np.random.seed(seed)
 scale = StandardScaler()
 X_train = scale.fit_transform(X_train)
 X_test = scale.fit_transform(X_test)
-estimator = KerasRegressor(build_fn=base_model, nb_epoch=15, batch_size=16,verbose=1)
-estimator.fit(X_train,y_train)
-res = estimator.predict(X_test)
+model.fit(X_train,y_train,batch_size=10)
+res = model.predict(X_test)
 
 print('\n','TEST Mean Absolute Error',abs(np.mean(abs(res)-abs(y_test)))/len(y_test),
 'Error',abs(np.mean(abs(res)-abs(y_test))),'Accuracy=',1-abs(np.mean(abs(res)-abs(y_test))))
@@ -69,5 +64,3 @@ plt.figure(figsize=(10,4))
 plt.plot(T,y_test[100:140],'o')
 plt.plot(xnew,smooth,'-',color='r',linewidth=3)
 plt.show()
-
-res.tofile('predictionKeras.csv',sep=',')
