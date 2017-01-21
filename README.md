@@ -36,6 +36,8 @@ I am a Data Scientist and I code in R, Python and Wolfram Mathematica. Here you 
 
 <b> NLP Sentiment Positive </b> is a model that identifies website content as positive, neutral or negative using BeautifulSoup and NLTK libraries, plotting the results. 
 
+<b> ROC Curve Multiclass </b> is a .py file where Naive Bayes was used to solve the IRIS Dataset task and ROC curve of different classes are plotted
+
 <b> Text-to-Speech </b> is a .py file where Python speaks any given text and saves it as an audio .wav file.
 
 <b> Time Series Prediction with Neural Networks - Keras </b> is a Neural Network model to forecast time series, using Keras with an adaptive learning rate depending upon derivative of loss.
