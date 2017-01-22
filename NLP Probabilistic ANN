@@ -34,7 +34,7 @@ pprint(texts)
 dictionary = corpora.Dictionary(texts)
 dictionary.save('/tmp/deerwester.dict')
 
-print(dictionary.token2id)
+print(dictionary.token2id) 
 
 # VETOR DA FRASE
 new_doc = "Human computer interaction"
