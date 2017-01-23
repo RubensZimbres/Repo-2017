@@ -46,4 +46,6 @@ I am a Data Scientist and I code in R, Python and Wolfram Mathematica. Here you 
 
 <b> Variational Autoencoder </b> is a VAE made with Keras.
 
+<b> t-SNE Dimensionality Reduction </b> is a t-SNE model for dimensionality reduction which is compared to Principal Components Analysis regarding its discriminatory power.
+
 <b> t-SNE PCA LDA embeddings </b> is a model where t-SNE, Principal Components Analysis, Linear Discriminant Analysis and  Random Forest embeddings are compared in a task to classify clusters of similar digits.
