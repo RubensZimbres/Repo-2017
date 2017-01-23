@@ -45,3 +45,5 @@ I am a Data Scientist and I code in R, Python and Wolfram Mathematica. Here you 
 <b> Time Series Prediction with Neural Networks - Keras </b> is a Neural Network model to forecast time series, using Keras with an adaptive learning rate depending upon derivative of loss.
 
 <b> Variational Autoencoder </b> is a VAE made with Keras.
+
+<b> t-SNE PCA LDA embeddings </b> is a model where t-SNE, Principal Components Analysis, Linear Discriminant Analysis and  Random Forest embeddings are compared in a task to classify clusters of similar digits.
