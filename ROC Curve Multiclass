@@ -11,7 +11,7 @@ x = iris.data[:, 2:]
 y = iris.target
 x_test = x
 y_test = y
-
+n_classes=3
 '''NAIVE BAYES'''
 
 from sklearn.naive_bayes import GaussianNB
@@ -22,31 +22,7 @@ nb=model.score(x,y)
 pred1=model.predict(x_test)
 t1=sum(x==0 for x in pred1-y_test)/len(pred1)
 
-### MICRO
-fpr = dict()
-tpr = dict()
-roc_auc = dict()
-for i in range(n_classes):
-    fpr[i], tpr[i], _ = roc_curve(np.array(pd.get_dummies(y_test))[:, i], np.array(pd.get_dummies(pred1))[:, i])
-    roc_auc[i] = auc(fpr[i], tpr[i])
-
-
-plt.figure()
-lw = 2
-for i in range(3):
-    plt.plot(fpr[i], tpr[i],
-         lw=lw, label='ROC curve (area = %0.2f)' % roc_auc[i])
-plt.plot([0, 1], [0, 1], color='navy', lw=lw, linestyle='--')
-plt.xlim([0.0, 1.0])
-plt.ylim([0.0, 1.05])
-plt.xlabel('False Positive Rate')
-plt.ylabel('True Positive Rate')
-plt.title('Receiver operating characteristic example')
-plt.legend(loc="lower right")
-plt.show()
-
 ### MACRO
-n_classes=3
 fpr = dict()
 tpr = dict()
 roc_auc = dict()
@@ -69,7 +45,7 @@ tpr["macro"] = mean_tpr
 roc_auc["macro"] = auc(fpr["macro"], tpr["macro"])
 
 lw=2
-plt.figure()
+plt.figure(figsize=(8,5))
 plt.plot(fpr["macro"], tpr["macro"],
          label='macro-average ROC curve (area = {0:0.2f})'
                ''.format(roc_auc["macro"]),
