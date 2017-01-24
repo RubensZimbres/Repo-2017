@@ -15,7 +15,7 @@ def norm(x):
 X=norm(X)
 y=norm(y)
 
-fa=decomposition.FactorAnalysis(n_components=90, tol=0.01, copy=True, max_iter=1000, noise_variance_init=None, svd_method='randomized', iterated_power=3, random_state=0)
+fa=decomposition.FactorAnalysis(n_components=2, tol=0.01, copy=True, max_iter=1000, noise_variance_init=None, svd_method='randomized', iterated_power=3, random_state=0)
 fa2=fa.fit_transform(X)
 
 pca=decomposition.TruncatedSVD(n_components=2)
