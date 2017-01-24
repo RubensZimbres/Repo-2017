@@ -55,17 +55,18 @@ y=y[0:1500]
 y_test=y[1501:1740]
 
 ### NEURAL NET FOR t-SNE
-epochs = 20
-learning_rate = 0.03
+epochs = 10
+learning_rate = 0.06
 decay_rate = 5e-6
 momentum = 0.9
 
 model=Sequential()
 model.add(Dense(12, input_dim=2, init='uniform'))
+model.add(Dropout(0.5))
 model.add(Dense(10, init='uniform'))
 model.add(Activation('sigmoid'))
 sgd = SGD(lr=learning_rate,momentum=momentum, decay=decay_rate, nesterov=False)
-model.compile(loss='categorical_crossentropy',optimizer=sgd,metrics=['mean_absolute_error'])
+model.compile(loss='categorical_crossentropy',optimizer=sgd,metrics=['accuracy'])
         
 model.fit(X_tsne[0:1500],y,nb_epoch=epochs,verbose=2)
 pred1=model.predict_classes(X_tsne[1501:1740])
@@ -80,7 +81,7 @@ sgd = SGD(lr=learning_rate,momentum=momentum, decay=decay_rate, nesterov=False)
 model2.compile(loss='categorical_crossentropy',optimizer=sgd,metrics=['mean_absolute_error'])
         
 model2.fit(pca3[0:1500],y,nb_epoch=epochs,verbose=2)
-pred2=model2.predict_classes(pca3[1501:1740])
+pred2=model.predict_classes(pca3[1501:1740])
 
 print('\n')
 print('Accuracy Test Set t-SNE + Neural Network 20 epochs:',1-[int(i) for i in (pred1-digits.target[1501:1740])].count(0)/len(X_tsne[1501:1740]))
