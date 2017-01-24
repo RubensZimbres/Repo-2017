@@ -82,7 +82,21 @@ model2.compile(loss='categorical_crossentropy',optimizer=sgd,metrics=['accuracy'
 model2.fit(pca3[0:1500],y,nb_epoch=epochs,verbose=2)
 pred2=model.predict_classes(pca3[1501:1740])
 
+
+from sklearn.cluster import KMeans
+model3=KMeans(n_clusters=10,random_state=0)
+model3.fit(X_tsne[0:1500],y[0:1500])
+pred3=model3.predict(X_tsne[1501:1740])
+
+model4=KMeans(n_clusters=10,random_state=0)
+model4.fit(pca3[0:1500],y[0:1500])
+pred4=model4.predict(pca3[1501:1740])
+
 print('\n')
 print('Accuracy Test Set t-SNE + Neural Network 20 epochs:',1-[int(i) for i in (pred1-digits.target[1501:1740])].count(0)/len(X_tsne[1501:1740]))
 print('\n')
 print('Accuracy Test Set PCA + Neural Network 20 epochs',1-[int(i) for i in (pred2-digits.target[1501:1740])].count(0)/len(X_tsne[1501:1740]))
+print('\n')
+print('Accuracy Test Set t-SNE + K-Means',1-[int(i) for i in (pred3-digits.target[1501:1740])].count(0)/len(X_tsne[1501:1740]))
+print('\n')
+print('Accuracy Test Set PCA + K-Means',1-[int(i) for i in (pred4-digits.target[1501:1740])].count(0)/len(X_tsne[1501:1740]))
