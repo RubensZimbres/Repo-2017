@@ -62,7 +62,6 @@ momentum = 0.9
 
 model=Sequential()
 model.add(Dense(12, input_dim=2, init='uniform'))
-model.add(Dropout(0.5))
 model.add(Dense(10, init='uniform'))
 model.add(Activation('sigmoid'))
 sgd = SGD(lr=learning_rate,momentum=momentum, decay=decay_rate, nesterov=False)
