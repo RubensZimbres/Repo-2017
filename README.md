@@ -1,4 +1,4 @@
-# Python Codes
+# Python Codes in Data Science
 
 Codes in NLP, Deep Learning, Reinforcement Learning and Artificial Intelligence
 
@@ -41,6 +41,8 @@ I am a Data Scientist and I code in R, Python and Wolfram Mathematica. Here you 
 <b> ROC Curve Multiclass </b> is a .py file where Naive Bayes was used to solve the IRIS Dataset task and ROC curve of different classes are plotted
 
 <b> Stacked Machine Learning </b> is a .py notebook where t-SNE, Principal Components Analysis and Factor Analysis were applied to reduce dimensionality of data. Classification performances were measured after applying K-Means.
+
+<b> Support Vector Regression </b> is a SVM model for non linear regression in an artificial dataset.
 
 <b> Text-to-Speech </b> is a .py file where Python speaks any given text and saves it as an audio .wav file.
 
