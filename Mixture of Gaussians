@@ -29,15 +29,13 @@ pl.hist(x[a3,:1].ravel(),normed=True)
 pl.title('MIXTURE OF GAUSSIANS CLASSIFICATION - IRIS DATASET - Petal Width')
 pl.show()
 
-### MISTURE OF GAUSSIANS FORMULA
-
 gauss=[]
 for i in range(0,len(x)):
     gauss.append(1/(np.sqrt(2*math.pi*np.std(x)**2))*math.exp(-.5*(x[i][1]-np.mean(x))/np.std(x)))
 
 classe=[]
 for i in range(0,len(gauss)):
-    if gauss[i]<.275:
+    if gauss[i]<.26:
         classe.append(2)
     elif gauss[i]>.33:
         classe.append(0)
