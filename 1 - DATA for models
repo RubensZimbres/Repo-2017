@@ -1,3 +1,71 @@
 Data for models available at:
 
-https://drive.google.com/drive/folders/0B0RLknmL54khU2UwX3dnX1E1WHc?usp=sharing 
+https://drive.google.com/drive/folders/0B0RLknmL54khU2UwX3dnX1E1WHc?usp=sharing
+
+GUIDELINES:
+
+* Accidents.dbf is a file of traffic accidents in the USA with geolocation of data
+
+* All_Starbucks_location.csv is also a file with geolocation of Starbucks stores in the US
+
+* Autoencoder_04767.hdf5 is a weight file for the autoencoder model developed with Keras
+
+* Brasil.shp is a file with Brazil map, used in R file
+
+* Collab.Filtering.csv Data is a file with a missing NaN value whose input is obtained through the Collaborative Filtering.py file
+
+* DadosTeseLogit.csv is a file with 29 features and 2 target variables. Column 30 is a continuous variable used for regression models and
+column 31 is a binary variable, used for classification. Data was obtained in my Doctorate thesis, in a market research with 100
+people. Data presents low variance.
+
+* DadosTeseLogit.csv is a file with 29 features and 2 target variables. Column 30 is a continuous variable used for regression models and
+column 31 is a variable with 3 classes, used for classification. Data was obtained in my Doctorate thesis, in a market research with 100
+people. Data presents low variance.
+
+* Edges2000.csv is a file used for social network modeling, presenting connections from and to for 2000 individuals.
+
+* EmailsData4.xlsx is a file used for social network modeling, presenting connections from and to, used in Mathematica model.
+
+* GameR.csv is a file from the game sector used for non linear regression.
+
+* haarcascade is a file used for OpenCV face recognition in Python.
+
+* imdb.d2v is a file of movie reviews
+
+* international-airline-passengers.csv is a file used for time series analysis
+
+* Jennifer.jpg is a file used for face recognition in R
+
+* JenniferGroup.jpg is a file used for face recognition using OpenCV in Python
+
+* LSTM.hdf5 is a weight file for the neural network model developed in Keras - Python
+
+* mnist_test10.csv is a test set file with 10 digits, for simple MNIST task models
+
+* mnist_test2k.csv is a train set file with 2000 digits, for simple MNIST task models
+
+* mnist.pkl.gz is the whole set of training and test set, with 60,000 and 10,000 examples, for the MNIST task
+
+* Multinomial.csv is a file used for multinomial logistic regression
+
+* quantum.txt is a small text file used for LSTM Neural Networks and Autoencoders
+
+* questao1.csv is a file to define employee turnover, but features have no significant correlation with target. The idea is to make a
+prediction of who is going to leave the company (label 1) and who is not (label 0). Also useful for data cleaning, because it contains
+dates, hours and currency.
+
+* questao1NN.csv is the same file questao1.csv, cleaned with best features chosen for use in Neural Networks.
+
+* test-neg.txt is a simple set of 8 negative movie reviews, for Natural Language Processing learning
+
+* test-pos.txt is a simple set of 8 positive movie reviews, for Natural Language Processing learning
+
+* train-neg.txt is simple a set of 8 negative movie reviews, for Natural Language Processing learning
+
+* train-pos.txt is a simple set of 8 positive movie reviews, for Natural Language Processing learning
+
+* VAE.610065.hdf5 is a variational autoencoder weight file.
+
+* weights.improvement is a neural network weight file.
+
+* ZarathustraSmall.txt is a file with Nietsche's Zarathustra chapters, used for autoencoders
