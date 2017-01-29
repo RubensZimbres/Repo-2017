@@ -18,7 +18,7 @@ GUIDELINES:
 column 31 is a binary variable, used for classification. Data was obtained in my Doctorate thesis, in a market research with 100
 people. Data presents low variance.
 
-* DadosTeseLogit.csv is a file with 29 features and 2 target variables. Column 30 is a continuous variable used for regression models and
+* DadosTeseLogit3.csv is a file with 29 features and 2 target variables. Column 30 is a continuous variable used for regression models and
 column 31 is a variable with 3 classes, used for classification. Data was obtained in my Doctorate thesis, in a market research with 100
 people. Data presents low variance.
 
@@ -50,9 +50,9 @@ people. Data presents low variance.
 
 * quantum.txt is a small text file used for LSTM Neural Networks and Autoencoders
 
-* questao1.csv is a file to define employee turnover, but features have no significant correlation with target. The idea is to make a
-prediction of who is going to leave the company (label 1) and who is not (label 0). Also useful for data cleaning, because it contains
-dates, hours and currency.
+* questao1.csv is a file to define employee turnover, but features have no significant correlation with target, what makes hard for
+prediction. The idea is to make a prediction of who is going to leave the company (label 1) and who is not (label 0). Useful file for
+data cleaning, because it contains dates, hours, currency and missing values.
 
 * questao1NN.csv is the same file questao1.csv, cleaned with best features chosen for use in Neural Networks.
 
