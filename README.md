@@ -55,3 +55,5 @@ I am a Data Scientist and I code in R, Python and Wolfram Mathematica. Here you 
 <b> t-SNE Dimensionality Reduction </b> is a t-SNE model for dimensionality reduction which is compared to Principal Components Analysis regarding its discriminatory power.
 
 <b> t-SNE PCA LDA embeddings </b> is a model where t-SNE, Principal Components Analysis, Linear Discriminant Analysis and  Random Forest embeddings are compared in a task to classify clusters of similar digits.
+
+<img src=https://github.com/RubensZimbres/Repo-2017/blob/master/Pictures%20-%20Formulas/t_SNE_Lk.png?raw=true>
