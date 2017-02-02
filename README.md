@@ -28,14 +28,11 @@ I am a Data Scientist and I code in R, Python and Wolfram Mathematica. Here you 
 
 <b> Lasagne Neural Nets + Weights </b> is a Neural Network model based in Theano and Lasagne, where is possible to visualize weights between X1 and X2 to hidden layer. Can also be adapted to visualize weights between hidden layer and output. It uses the DadosTeseLogit.csv sample file.
 
-<img src=https://github.com/RubensZimbres/Repo-2017/blob/master/Pictures%20-%20Formulas/Backpropagation.ME.jpg?raw=true>
-
 <b> Multinomial Regression </b> is a regression model where target variable has 3 classes.
 
 <b> Neural Networks for Regression </b> shows multiple solutions for a regression problem, solved with sklearn, Keras, Theano and Lasagne. It uses the Boston dataset sample file from sklearn and reaches more than 98% accuracy.
 
-<img src=https://github.com/RubensZimbres/Repo-2017/blob/master/Pictures%20-%20Formulas/NN.24.Adjust.jpg?raw=true>
-
+<img src=https://github.com/RubensZimbres/Repo-2017/blob/master/Pictures%20-%20Formulas/HiddenLayers.jpg?raw=true>
 
 <b> NLP + Naive Bayes Classifier </b> is a model where movie reviews were labeled as positive and negative and the algorithm then classifies a totally new set of reviews using Logistic Regression, Decision Trees and Naive Bayes, reaching an accuracy of 92%.
 
