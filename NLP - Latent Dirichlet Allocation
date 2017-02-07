@@ -180,9 +180,6 @@ print(corpus)
 from gensim import corpora, models, similarities
 tfidf = models.TfidfModel(corpus) # step 1 -- initialize a model
 
-### COORDENADA DA FRASE
-frase=tfidf[new_vec]
-print(frase)
 
 corpus_tfidf = tfidf[corpus]
 for doc in corpus_tfidf:
@@ -223,12 +220,6 @@ index = similarities.MatrixSimilarity(lsi[corpus]) # transform corpus to LSI spa
 index.save('/tmp/deerwester4.index')
 index = similarities.MatrixSimilarity.load('/tmp/deerwester4.index')
 
-sims = index[vec_lsi] # perform a similarity query against the corpus
-print(list(enumerate(sims))) # print (document_number, document_similarity) 2-tuples
-
-sims = sorted(enumerate(sims), key=lambda item: -item[1])
-print(sims) # print sorted (document number, similarity score) 2-tuples
-
 #################
 
 import gensim
@@ -250,6 +241,8 @@ X=norm(matrix3)
 
 tsne = manifold.TSNE(n_components=2, init='pca', random_state=0,perplexity=50,verbose=1,n_iter=1500)
 X_tsne = tsne.fit_transform(X)
+
+### WORK HERE - COMO DESCOBRI QUE TINHA 3 CLUSTERS ???? SORT X_tsne
 
 from sklearn.cluster import KMeans
 model3=KMeans(n_clusters=3,random_state=0)
