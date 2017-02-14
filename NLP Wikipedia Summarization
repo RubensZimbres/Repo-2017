@@ -137,11 +137,6 @@ tokens_txt=[word_tokenize(txt2[i]) for i in range(0,len(txt))]
 
 from collections import Counter
 
-for i in range(0,len(tokens_txt)):
-    wordcounts = Counter(tokens_txt[i])
-    print(wordcounts['donald'])
-
-
 def norm(x):
     return (x-np.min(x))/(np.max(x)-np.min(x))
 
