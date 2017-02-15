@@ -22,6 +22,8 @@ people. Data presents low variance.
 column 31 is a variable with 3 classes, used for classification. Data was obtained in my Doctorate thesis, in a market research with 100
 people. Data presents low variance.
 
+* Digits_.csv is a mini MNIST dataset, with 1765 handwritten digits of a 8 x 8 array
+
 * Edges2000.csv is a file used for social network modeling, presenting connections from and to for 2000 individuals.
 
 * EmailsData4.xlsx is a file used for social network modeling, presenting connections from and to, used in Mathematica model.
@@ -44,7 +46,8 @@ people. Data presents low variance.
 
 * mnist_test2k.csv is a train set file with 2000 digits, for simple MNIST task models
 
-* mnist.pkl.gz is the whole set of training and test set, with 60,000 and 10,000 examples, for the MNIST task
+* mnist.pkl.gz is the whole set of training and test MNIST dataset (handwritten digits), with 60,000 and 10,000 examples, for the MNIST
+task. Each example is made of 28 x 28 pixels.
 
 * Multinomial.csv is a file used for multinomial logistic regression
 
