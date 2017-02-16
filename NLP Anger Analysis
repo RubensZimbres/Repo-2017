@@ -31,7 +31,6 @@ def feedFacebook(page_id, access_token,num_statuses):
     b=json.dumps(data, indent=4, sort_keys=True)
     return data
 a=feedFacebook(page_id, access_token,100)
-a
 
 for k in range(0,10):
     print(a['data'][k]['message'])
