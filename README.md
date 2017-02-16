@@ -38,6 +38,8 @@ I am a Data Scientist and I code in R, Python and Wolfram Mathematica. Here you 
 
 <b> NLP Consumer Complaint </b> is a model where Facebook posts of a U.S. computer retailer were scraped, tokenized, lemmatized and applied Word2Vec. After that, t-SNE and Latent Dirichlet Allocation were developed in order to classify the arguments and weights of each keyword used by a consumer in his complaint. The code also analyzes frequency of words in 100 posts.
 
+<b> NLP Doc2Vec </b> is a Natural Language Procesing file where cosine similarity among phrases is measured through Doc2Vec.
+
 <b> NLP - Latent Dirichlet Allocation </b> is a Natural Language Processing model where a Wikipedia page on Statistical Inference is classified regarding topics, using Latent Dirichlet Allocation with Gensim, NLTK, t-SNE and K-Means.
 
 <b> NLP Probabilistic ANN </b> is a Natural Langugage Processing model where sentences are vectorized by Gensim and a probabilistic Neural Network model is deveoped using Gensim, for sentiment analysis.
