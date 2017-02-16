@@ -12,8 +12,8 @@ import codecs
 
 reader = codecs.getreader("utf-8")
 
-app_id = "1578600452155768"
-app_secret = "841a340550d73a4a37030007d6eaaaf1"
+app_id = "12345"
+app_secret = "12345"
 
 access_token = app_id + "|" + app_secret
 
