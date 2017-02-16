@@ -36,6 +36,8 @@ I am a Data Scientist and I code in R, Python and Wolfram Mathematica. Here you 
 
 <b> NLP + Naive Bayes Classifier </b> is a model where movie reviews were labeled as positive and negative and the algorithm then classifies a totally new set of reviews using Logistic Regression, Decision Trees and Naive Bayes, reaching an accuracy of 92%.
 
+<b> NLP Anger Analysis </b> is a Doc2Vec model associated with Word2Vec model to analyze level of anger using synonyms in consumer complaints of a U.S. retailer in Facebook posts.
+
 <b> NLP Consumer Complaint </b> is a model where Facebook posts of a U.S. computer retailer were scraped, tokenized, lemmatized and applied Word2Vec. After that, t-SNE and Latent Dirichlet Allocation were developed in order to classify the arguments and weights of each keyword used by a consumer in his complaint. The code also analyzes frequency of words in 100 posts.
 
 <b> NLP Doc2Vec </b> is a Natural Language Procesing file where cosine similarity among phrases is measured through Doc2Vec.
