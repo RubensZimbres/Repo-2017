@@ -17,8 +17,6 @@ app_secret = "12345"
 
 access_token = app_id + "|" + app_secret
 
-
-### O ERRO DEPENDE DO SITE
 page_id = 'washingtonpost'
 
 def feedFacebook(page_id, access_token,num_statuses):
@@ -38,8 +36,6 @@ txt=[]
 share=[]
 for i in range(0,50):
     txt.append(a['data'][i]['message'])
-
-#### AVALIAR DAQUI MULTIPLAS VEZES ATE CONSEGUIR
 
 tokens = word_tokenize(str(txt))
 tokens
