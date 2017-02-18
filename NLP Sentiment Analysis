@@ -17,7 +17,9 @@ app_secret = "12345"
 
 access_token = app_id + "|" + app_secret
 
-page_id = 'foxnews'
+
+### O ERRO DEPENDE DO SITE
+page_id = 'washingtonpost'
 
 def feedFacebook(page_id, access_token,num_statuses):
     base = "https://graph.facebook.com/v2.8"
@@ -36,6 +38,8 @@ txt=[]
 share=[]
 for i in range(0,50):
     txt.append(a['data'][i]['message'])
+
+#### AVALIAR DAQUI MULTIPLAS VEZES ATE CONSEGUIR
 
 tokens = word_tokenize(str(txt))
 tokens
@@ -253,9 +257,8 @@ plt.show()
 print('WEIGHTS OF ARGUMENTS:\n')
 ldamodel.print_topics(num_topics=10, num_words=3)
 
-feeling0=['Annoyed   Apathetic   Bored   Certain   Cold   Crabby   Cranky   Critical   Cross   Detached   Displeased   Frustrated   Impatient   Indifferent   Irritated   Peeved   Rankled Medium (or Mood-State) Anger Affronted   Aggravated   Angry   Antagonized   Arrogant   Bristling   Exasperated   Incensed   Indignant   Inflamed   Mad   Offended   Resentful   Riled up   Sarcastic Intense Anger and Hatred Aggressive   Appalled   Belligerent   Bitter   Contemptuous   Disgusted   Furious   Hateful   Hostile   Irate   Livid   Menacing   Outraged   Ranting   Raving   Seething   Spiteful   Vengeful   Vicious   Vindictive   Violent Abashed   Awkward   Discomfited   Flushed   Flustered   Hesitant   Humble   Reticent   Self-conscious   Speechless   Withdrawn Shame and Guilt Ashamed   Chagrined   Contrite   Culpable   Embarrassed   Guilty   Humbled   Intimidated   Penitent   Regretful   Remorseful   Reproachful   Rueful   Sheepish Intense Shame  Belittled   Degraded   Demeaned   Disgraced   Guilt-ridden   Guilt-stricken   Humiliated   Mortified   Ostracized   Self-condemning   Self-flagellating   Shamefaced   Stigmatized Fear and Anxiety Alert   Apprehensive   Cautious   Concerned   Confused   Curious   Disconcerted   Disoriented   Disquieted   Doubtful   Edgy   Fidgety   Hesitant   Indecisive   Insecure   Instinctive   Intuitive   Leery   Pensive   Shy   Timid   Uneasy   Watchful Fear  Anxiety Afraid   Alarmed   Anxious   Aversive   Distrustful   Fearful   Jumpy   Nervous   Perturbed   Rattled   Shaky   Startled   Suspicious   Unnerved   Unsettled   Wary   Worried Intense Fear and Panic Dread   Horrified   Panicked   Paralyzed   Petrified   Phobic   Shocked   Terrorized Jealousy    Envy Disbelieving   Distrustful   Insecure   Protective   Suspicious   Vulnerable Medium Jealousy    Envy Covetous   Demanding   Desirous   Envious   Jealous   Threatened Intense Jealousy    Envy Avaricious   Gluttonous   Grasping   Greedy   Green with Envy   Persistently Jealous   Possessive Resentful  Happiness Amused   Calm   Encouraged   Friendly   Hopeful   Inspired   Jovial   Open   Peaceful   Smiling Upbeat Medium Happiness and Contentment Cheerful   Contented   Delighted   Excited   Fulfilled   Glad   Gleeful   Gratified   Happy   Healthy Self-esteem   Joyful   Lively   Merry   Optimistic   Playful   Pleased   Proud   Rejuvenated   Satisfied Intense Happiness   Contentment   and Joy Awe-filled   Blissful   Ecstatic   Egocentric   Elated   Enthralled   Euphoric   Exhilarated   Giddy   Jubilant   Manic   Overconfident   Overjoyed   Radiant   Rapturous   Self-aggrandized   Thrilled Sadness Contemplative   Disappointed   Disconnected   Distracted   Grounded   Listless   Low   Steady   Regretful   Wistful Medium (or Mood-State) Sadness   Grief   and Depression Dejected   Discouraged   Dispirited   Down   Downtrodden   Drained   Forlorn   Gloomy   Grieving   Heavy-hearted   Melancholy   Mournful   Sad   Sorrowful   Weepy   World-weary Intense Sadness   Grief   and Depression Anguished   Bereaved   Bleak   Depressed   Despairing   Despondent   Grief-stricken   Heartbroken   Hopeless   Inconsolable   Morose Depression Suicidal Urges Apathetic   Constantly Irritated   Angry   Enraged   Depressed   Discouraged   Disinterested   Dispirited   Feeling Worthless   Flat   Helpless   Humorless   Impulsive   Indifferent   Isolated   Lethargic   Listless   Melancholy   Pessimistic   Purposeless   Withdrawn   World-weary Integration Depression Suicidal Urges    Crushed   Desolate   Despairing   Desperate   Drained   Empty   Fatalistic   Hopeless   Joyless   Miserable   Morbid   Overwhelmed   Passionless   Pleasureless   Sullen Intense Suicidal Urges Agonized   Anguished   Bleak   Death-seeking   Devastated   Doomed   Gutted   Nihilistic   Numbed   Reckless   Self-destructive   Suicidal   Tormented   Tortured delighted happy sad acrimony animosity annoyance antagonism displeasure exasperation fury hatred impatience indignation ire irritation outrage passion rage resentment temper violence chagrin cholera conniption dander disapprobation distemper gall huff infuriation irascibility irritability miff peevishness petulance pique rankling soreness stew storm tantrum tiff umbrage vexation blow fit hissy  humor ill temper mad slow burn bliss contentment delight elation enjoyment euphoria exhilaration glee joy jubilation laughter optimism peace  pleasure prosperity well-being beatitude blessedness cheer cheerfulness content delectation delirium ecstasy enchantment exuberance felicity gaiety geniality gladness hilarity hopefulness joviality lightheartedness merriment mirth paradise playfulness rejoicing sanctity vivacity cheeriness good cheer good humor good spirits seventh heaven ache agony burn cramp discomfort fever illness injury irritation misery sickness soreness spasm strain tenderness torment trouble twinge wound affliction catch convulsion crick distress gripe hurt laceration malady pang paroxysm prick smarting sting stitch throb throe tingle torture anguish grief heartache heartbreak hopelessness melancholy misery mourning poignancy sorrow blahs bleakness bummer cheerlessness dejection despondency disconsolateness dispiritedness distress dolefulness dolor downer dysphoria forlornness funk  gloominess letdown listlessness moodiness mopes mournfulness sorrowfulness tribulation woe  blue devils blue funk broken heart dismals downcastness grieving heavy heart the blues the dumps balked crabbed cramped crimped defeated discontented discouraged disheartened embittered foiled irked stonewalled stymied fouled hung resentful through  ungratified unsated unslaked the wall angst anxiety concern despair dismay doubt dread horror jitters panic scare suspicion terror unease uneasiness worry abhorrence agitation aversion awe consternation cowardice creeps discomposure disquietude distress faintheartedness foreboding fright funk misgiving nightmare phobia presentiment qualm reverence revulsion timidity trembling tremor trepidation bête noire  cold feet cold sweat recreancy bothered clutched concerned distracted distressed disturbed frightened perturbed tense tormented upset afraid apprehensive beside oneself distraught fearful fretful  ease nervous edge needles overwrought solicitous uneasy uptight worried']
+feeling0=['assured bright buoyant cheerful cheering confident encouraged expectant happy high hopeful hoping idealistic keeping the faith merry positive promising rose-colored rosy sanguine sunny trusting utopian pleased appreciative contented happy satisfied charmed content amused entertained Annoyed Apathetic Bored Certain Cold Crabby Cranky Critical Cross Detached Displeased Frustrated Impatient Indifferent Irritated Peeved Rankled Medium (or Mood-State) Anger Affronted Aggravated Anger Antagonized Arrogant Bristlin Exasperated Incensed Indignant Inflamed Mad Offended Resentful Riled up Sarcastic Intense Anger Hatred Aggressive Appalled Belligerent Bitter Contemptuous Disgusted Furious Hateful Hostile Irate Livid Menacing Outraged Ranting Raving Seething Spiteful Vengeful Vicious Vindictive Violent Abashed Awkward Discomfited Flushed Flustered Hesitant Humble Reticent Self-conscious Speechless Withdrawn Shame Guilt Ashamed Chagrined Contrite Culpable Embarrassed Guilty Humbled Intimidated Penitent Regretful Remorseful Reproachful Rueful Sheepish Intense Sham Belittled Degraded Demeaned Disgraced Guilt-ridden Guilt-stricken Humiliated Mortified Ostracized Self-condemning Self-flagellating Shamefaced Stigmatized Fear Anxiety Alert Apprehensive Cautious Concerne Confused Curiou Disconcerted Disoriented Disquieted Doubtful Edgy Fidgety Hesitant Indecisive Insecure Instinctive Intuitiv Leery Pensive Shy Timid Uneasy Watchful FearAnxiety Afraid Alarmed Anxious Aversive Distrustful Fearful Jumpy Nervous Perturbed Rattled Shaky Startled Suspicious Unnerved Unsettled Wary Worried Intense Fear Panic Dread Horrified Panicked Paralyzed Petrified Phobic Shocked Terrorized JealousyEnvy Disbelieving Distrustful Insecure Protective Suspicious Vulnerable Medium JealousyEnvy Covetous Demanding Desirous Envious Jealous Threatened Intense Jealousy Avaricious Gluttonous Grasping Greedy Envy Persistently Jealous Possessive Resentful Happiness Amused Calm Encouraged Friendly Hopeful Inspired Jovial Open Peaceful Smiling Upbeat Medium Happiness Contentment Cheerful Contented Delighted Excited Fulfilled Glad Gleeful Gratified Happy Healthy Self-esteem Joyful Lively Merry Optimistic Playful Pleased Proud Rejuvenated Satisfied Intense Happiness Contentment Joy Awe-filled Blissful Ecstatic Egocentric Elated Enthralled Euphoric Exhilarated Giddy Jubilant Manic Overconfident Overjoyed Radiant Rapturous Self-aggrandized Thrilled Sadness Contemplative Disappointed Disconnected Distracted Grounded Listless Low Steady Regretful Wistful Medium Sadness Grief Depression Dejected Discouraged Dispirited Down Downtrodden Drained Forlorn Gloomy Grieving Heavy-hearted Melancholy Mournful Sad Sorrowful Weepy World-weary Intense Sadness Grief Depression Anguished Bereaved Bleak Depressed Despairing Despondent Grief-stricken Heartbroken Hopeless Inconsolable Morose Depression Suicidal Urges Apathetic Constantly Irritated Angry Enraged Depressed Discouraged Disinterested Dispirited Feeling Worthless Flat Helpless Humorless Impulsive Indifferent Isolated Lethargic Listless Melancholy Pessimistic Purposeless Withdrawn World-weary Integration Depression Suicidal Urges Crushed Desolate Despairing Desperate Drained Empty Fatalistic Hopeless Joyless Miserable Morbid Overwhelmed Passionless Pleasureless Sullen Intense Suicidal Urges Agonized Anguished Bleak Death-seeking Devastated Doomed Gutted Nihilistic Numbed Reckless Self-destructive Suicidal Tormented Tortured delighted happy sad acrimony animosity annoyance antagonism displeasure exasperation fury hatred impatience indignation ire irritation outrage passion rage resentment temper violence chagrin cholera conniption dander disapprobation distemper gall huff infuriation irascibility irritability miff peevishness petulance pique rankling soreness stew storm tantrum tiff umbrage vexation blow fit hissy humor ill temper mad slow burn bliss contentment delight elation enjoyment euphoria exhilaration glee joy jubilation laughter optimism peace pleasure prosperity well-being beatitude blessedness cheer cheerfulness content delectation delirium ecstasy enchantment exuberance felicity gaiety geniality gladness hilarity hopefulness joviality lightheartedness merriment mirth paradise playfulness rejoicing sanctity vivacity cheeriness good cheer good humor good spirits seventh heaven ache agony burn cramp discomfort fever illness injury irritation misery sickness soreness spasm strain tenderness torment trouble twinge wound affliction catch convulsion crick distress gripe hurt laceration malady pang paroxysm prick smarting sting stitch throb throe tingle torture anguish grief heartache heartbreak hopelessness melancholy misery mourning poignancy sorrow blahs bleakness bummer cheerlessness dejection despondency disconsolateness dispiritedness distress dolefulness dolor downer dysphoria forlornness funny funk gloominess letdown listlessness moodiness mopes mournfulness sorrowfulness tribulation woe blue devils blue funk broken heart dismals downcastness grieving heavy heart the blues the dumps balked crabbed cramped crimped defeated discontented discouraged disheartened embittered foiled irked stonewalled stymied fouled hung resentful through ungratified unsated unslaked the wall angst anxiety concern despair dismay doubt dread horror jitters panic scare suspicion terror unease uneasiness worry abhorrence agitation aversion awe consternation cowardice creeps discomposure disquietude distress faintheartedness foreboding fright funk misgiving nightmare phobia presentiment qualm reverence revulsion timidity trembling tremor trepidation bête noire cold feet cold sweat recreancy bothered clutched concerned distracted distressed disturbed frightened perturbed tense tormented upset afraid apprehensive beside oneself distraught fearful fretful ease nervous edge needles overwrought solicitous uneasy uptight worried cheerful contented delighted ecstatic elated glad joyful joyous jubilant lively merry overjoyed peaceful pleasant pleased thrilled upbeat blessed blest blissful blithe captivated chipper chirpy content convivial exultant flying high gay gleeful gratified intoxicated jolly laughing light looking good mirthful on cloud nine peppy perky playful sparkling sunny tickled tickled pink amusing comical entertaining humorous laughable lively priceless uproarious convivial exhilarated frolicsome gay gleeful gut-busting happy jocular jolly jovial joyful joyous merry mirthful noisy riot rollicking scream side-splitting witty comfortable contented fulfilled satisfied willing appeased gratified complacent happy pleased']
 feeling=str(feeling0).lower()
-
 
 ## VETOR DAS FRASES
 tokens232 = word_tokenize(str(feeling))
@@ -288,16 +291,22 @@ for doc in corpus_lsi2: # both bow->tfidf and tfidf->lsi transformations are act
     todas2.append(doc)
 todas2
 
+todas00=[]
+for j in np.where(np.array([len(todas2[i]) for i in range(0,len(todas2))])==2)[0]:
+    todas00.append(todas2[j])
+
+todas00
+
 import gensim
 import numpy as np
 import matplotlib.colors as colors
 import matplotlib.cm as cmx
 import matplotlib as mpl
 
-matrix1 = gensim.matutils.corpus2dense(todas2, num_terms=2)
+matrix1 = gensim.matutils.corpus2dense(todas00, num_terms=2)
 matrix31=matrix1.T
-DATA2=matrix31[0:10]
-matrix3
+DATA2=matrix31
+DATA2.T[0]
 
 from scipy.spatial.distance import cosine
 from nltk.sentiment import SentimentAnalyzer
@@ -325,6 +334,11 @@ sent0=np.array(neu).reshape(f,4)
 sent=np.array(neg).reshape(f,4)
 comp=sent.T[0]
 
+
+positivos=len(np.where(np.array(comp)>0)[0])
+neutros=len(np.where(np.array(comp)==0)[0])
+negativos=len(np.where(np.array(comp)<0)[0])
+
 aj=[]
 for i in range(0,len(comp)):
     if comp[i]<0:
@@ -334,6 +348,7 @@ for i in range(0,len(comp)):
     else:
         aj.append('Neutral')
 
+import time
 for k in range(0,len(sentences)):
     try:
         print('SENTENCE:',sentences[k],'SENTIMENT:',[aj[i]+' '+tokens23[i] for i in np.where(np.array([round(cosine(matrix3[k],DATA2[i]),6) for i in range(0,DATA2.shape[0])])==min([round(cosine(matrix3[k],DATA2[i]),6) for i in range(0,DATA2.shape[0])]))[0]],'\n')
