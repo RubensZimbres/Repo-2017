@@ -17,7 +17,7 @@ app_secret = "12345"
 
 access_token = app_id + "|" + app_secret
 
-page_id = 'costco'
+page_id = 'foxnews'
 
 def feedFacebook(page_id, access_token,num_statuses):
     base = "https://graph.facebook.com/v2.8"
@@ -34,13 +34,10 @@ a=feedFacebook(page_id, access_token,100)
 
 txt=[]
 share=[]
-for i in range(0,10):
+for i in range(0,50):
     txt.append(a['data'][i]['message'])
 
-txt
-
-
-tokens = word_tokenize(str(a))
+tokens = word_tokenize(str(txt))
 tokens
 
 long_words1 = [w for w in tokens if 7<len(w)<9]
@@ -65,7 +62,7 @@ plt.figure(figsize=(9,4))
 plt.barh(pos,val, align='center',alpha=0.7,color='rgbcmyk')
 plt.yticks(pos, names0)
 plt.xlabel('Mentions')
-plt.title('FACEBOOK ANALYSIS\n'+page_id)
+plt.title('FACEBOOK ANALYSIS\n')
 
 
 from string import punctuation
@@ -246,7 +243,7 @@ plt.figure(figsize=(8,3))
 plt.barh(pos,val, align='center',alpha=0.7,color='rgbcmyk')
 plt.yticks(pos, names0)
 plt.xlabel('Mentions')
-plt.title('FACEBOOK ANALYSIS   '+page_id+'   Word Frequency',fontweight="bold")
+plt.title('FACEBOOK ANALYSIS   '+'   Word Frequency',fontweight="bold")
 
 fig = plt.figure(figsize=(8,3))
 plt.title('CNN Facebook\n\n'+'ANALYIS USING FACEBOOK API and Natural Language Processing\n\n'+'Arguments used (clusters) obtained via K-Means',fontweight="bold")
@@ -299,13 +296,46 @@ import matplotlib as mpl
 
 matrix1 = gensim.matutils.corpus2dense(todas2, num_terms=2)
 matrix31=matrix1.T
-DATA2=matrix31[0:130]
+DATA2=matrix31[0:10]
 matrix3
 
 from scipy.spatial.distance import cosine
+from nltk.sentiment import SentimentAnalyzer
+from nltk.sentiment.util import *
+from nltk.sentiment.vader import SentimentIntensityAnalyzer as sia
+sentim=sia()
+
+cc=[]
+for sentence in tokens23:
+    cc.append(sentim.polarity_scores(sentence))
+cc
+neu=[]
+neg=[]
+for sentence in tokens23:
+        ss = sentim.polarity_scores(sentence)
+        for k in sorted(ss):
+            print('{0}: {1}, '.format(k, ss[k]), end='')
+            neg.append(ss[k])
+            neu.append(k)
+        print()
+        print('\n')
+
+f=int(len(neg)/4)
+sent0=np.array(neu).reshape(f,4)
+sent=np.array(neg).reshape(f,4)
+comp=sent.T[0]
+
+aj=[]
+for i in range(0,len(comp)):
+    if comp[i]<0:
+        aj.append('Negative')
+    elif comp[i]>0:
+        aj.append('Positive')
+    else:
+        aj.append('Neutral')
 
 for k in range(0,len(sentences)):
     try:
-        print('SENTENCE:',sentences[k],'SENTIMENT:',[tokens23[i] for i in np.where(np.array([round(cosine(matrix3[k],DATA2[i]),6) for i in range(0,DATA2.shape[0])])==min([round(cosine(matrix3[k],DATA2[i]),6) for i in range(0,DATA2.shape[0])]))[0]],'\n')
+        print('SENTENCE:',sentences[k],'SENTIMENT:',[aj[i]+' '+tokens23[i] for i in np.where(np.array([round(cosine(matrix3[k],DATA2[i]),6) for i in range(0,DATA2.shape[0])])==min([round(cosine(matrix3[k],DATA2[i]),6) for i in range(0,DATA2.shape[0])]))[0]],'\n')
     except:
         pass
