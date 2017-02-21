@@ -312,7 +312,7 @@ for i in range(0,4):
     h.append(h1)
 plt.legend(h,label,loc="upper left")
 plt.show()
-print("TWITTER ANALYSIS of 300 hashtags Globalization. Note that there is a focus in Topic 0 (red) (crisis, culture, economic, retreat, justice and pontifex(yes, the Pope)). Topics 1,2,3 are smaller in number and scattered\n")
+
 model = models.LdaModel(corpus, id2word=dictionary, num_topics=4)
 model.print_topics(4)
 
