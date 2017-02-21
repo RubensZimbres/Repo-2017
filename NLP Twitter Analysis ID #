@@ -280,7 +280,6 @@ cc=model3.predict(X_tsne)
 ## ALSO TRY COM X PARA VER QUE TOPICO SELECIONA
 
 tokens2 = word_tokenize(str(sentences2))
-tokens2
 
 long_words12 = [w for w in tokens2 if len(w) > 6]
 sorted(long_words12)
