@@ -10,10 +10,36 @@ import numpy as np
 import matplotlib.pyplot as plt
 from nltk.stem import WordNetLemmatizer
 import re
+import pandas as pd
+
+import tweepy
+from tweepy import OAuthHandler
+from tweepy import Stream
+from tweepy.streaming import StreamListener
+import re
+ 
+consumer_key = '12345'
+consumer_secret = '12345'
+access_token = '123-12345'
+access_secret = '12345'
+ 
+auth = OAuthHandler(consumer_key, consumer_secret)
+auth.set_access_token(access_token, access_secret)
+ 
+api = tweepy.API(auth)
+
+number_tweets=100
+data=[]
+for status in tweepy.Cursor(api.search,q="trump").items(number_tweets):
+    try:
+        URLless_string = re.sub(r'\w+:\/{2}[\d\w-]+(\.[\d\w-]+)*(?:(?:\/[^\s/]*))*', '', status.text)
+        data.append(URLless_string)
+    except:
+        pass
+
 lemmatizer = WordNetLemmatizer()
 
-data=pd.read_csv('Twitter_husband.csv',sep=',',header=0)
-text=np.array(data.ix[:,1])
+text=data
 
 sentences = sent_tokenize(str(text))
 sentences2=sentences
@@ -69,13 +95,6 @@ lexical_diversity(text)
 vocab = set(text)
 vocab_size = len(vocab)
 vocab_size
-
-' '.join(['Monty', 'Python'])
-'Monty Python'.split()
-a="This is a text.'"
-chars_to_remove = ['.', '!', '?',"'"]
-sc = set(chars_to_remove)
-''.join([c for c in a if c not in sc])
 
 
 V = set(text)
@@ -276,8 +295,8 @@ cor=[colors[cc[i]] for i in range(0,len(cc))]
 
 h=[]
 label=[]
-fig = plt.figure(figsize=(10,4))
-plt.title('NATURAL LANGUAGE PROCESSING\n\n'+'TOPIC MODELING at TWITTER HASHTAG: '+'#husband',fontweight="bold")
+fig = plt.figure(figsize=(8,4))
+plt.title('NATURAL LANGUAGE PROCESSING\n\n'+'TOPIC MODELING at TWITTER HASHTAG: '+'#trump',fontweight="bold")
 for i in range(0,4):
     label.append('Topic {}'.format([0,1,2,3][i]))
     plt.scatter(X_tsne[:, 0], X_tsne[:, 1],c=cc,cmap=cm,marker='o',s=100)
@@ -321,8 +340,9 @@ neutros=len(np.where(np.array(comp)==0)[0])
 negativos=len(np.where(np.array(comp)<0)[0])
 
 from matplotlib import style
+print(plt.style.available)
 
-style.use("ggplot")
+style.use("seaborn-darkgrid")
 
 x = np.arange(0, len(comp), 1)
 plt.figure(figsize=(9,6))
@@ -331,6 +351,5 @@ plt.fill_between(x,np.cumsum(comp),0,where=np.cumsum(comp)<0,facecolor='red',alp
 plt.fill_between(x,np.cumsum(comp),0,where=np.cumsum(comp)>0,facecolor='lawngreen',alpha=.7)
 plt.annotate('POSITIVE',(140,1.5),fontweight='bold')
 plt.annotate('NEGATIVE',(140,-3),fontweight='bold')
-plt.title('Natural Language Processing\n'+'\n'+'Mood in Twitter Streaming #husband Feb 22, 2017',fontweight='bold')
+plt.title('Natural Language Processing\n'+'\n'+'Mood in Twitter Streaming #trump Feb 23, 2017 - 5 Minutes',fontweight='bold')
 plt.show()
-
