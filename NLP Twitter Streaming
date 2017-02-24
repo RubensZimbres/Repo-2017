@@ -1,0 +1,54 @@
+import tweepy
+from tweepy import OAuthHandler
+import time
+from tweepy import Stream
+from tweepy.streaming import StreamListener
+import codecs
+
+reader = codecs.getreader("utf-8")
+
+consumer_key = '12345'
+consumer_secret = '12345'
+access_token = '123-12345'
+access_secret = '12345'
+ 
+auth = OAuthHandler(consumer_key, consumer_secret)
+auth.set_access_token(access_token, access_secret)
+ 
+api = tweepy.API(auth)
+    
+bb=[]    
+class MyListener(StreamListener):
+
+    def __init__(self, api=None):
+        super(MyListener, self).__init__()
+        self.num_tweets = 0
+    
+    def on_status(self, status):
+        record = {'Text': status.text, 'Created At': status.created_at}
+        print(record) #See Tweepy documentation to learn how to access other fields
+        self.num_tweets += 1
+        if self.num_tweets < 2:
+            collection.insert(record)
+            return True
+        else:
+            return False 
+    def on_data(self, data):
+        try:
+            print(type(data))
+            bb.append(data)
+            print(bb)
+            time.sleep(10)
+        except BaseException as e:
+            print('Error')
+            time.sleep(10)
+        return True
+ 
+    def on_error(self, status):
+        print(status)
+        time.sleep(10)
+        return True
+
+### AVALIAR DAQUI 
+twitter_stream = Stream(auth, MyListener())
+twitter_stream.filter(track=['#trump'],async=True)
