@@ -35,11 +35,11 @@ fig=plt.figure(figsize=(8,6))
 ax1 = fig.add_subplot(1,1,1)
 
 FFMpegWriter = manimation.writers['ffmpeg']
-metadata = dict(title='Twitter Streaming', artist='Rubens Zimbres',
-                comment='Movie support!')
+metadata = dict(title='Real-Time Analysis of Twitter Streaming', artist='Rubens Zimbres',
+                comment='Real-Time Analysis of Twitter Streaming')
 writer = FFMpegWriter(fps=2, metadata=metadata,bitrate=-1,codec="libx264",extra_args=['-pix_fmt', 'yuv420p'])
 
-with writer.saving(fig, "Twitter_REAL_Time_40.mp4", 5):
+with writer.saving(fig, "Twitter_REAL_Time_40.mp4", 100):
     while t<20:
         t=t+1
         data=[]
