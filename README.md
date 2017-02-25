@@ -70,6 +70,8 @@ I am a Data Scientist and I code in R, Python and Wolfram Mathematica. Here you 
 
 <b> Probabilistic Neural Network </b>	is a Probabilistic Neural Network for Time Series Prediction.
 
+<b> REAL-TIME Twitter Analysis </b> is a model where Twitter streaming is extracted, words and sentences tokenized, word embeddings were created, topic modeling was made and classified using K-Means. Then, NLTK SentimentAnalyzer was used to classify each sentence of the streaming into positive, neutral or negative. Accumulated sum was used to generate the plot and the code loops each 1 second, collecting new tweets.
+
 <b> ROC Curve Multiclass </b> is a .py file where Naive Bayes was used to solve the IRIS Dataset task and ROC curve of different classes are plotted.
 
 <b> Stacked Machine Learning </b> is a .py notebook where t-SNE, Principal Components Analysis and Factor Analysis were applied to reduce dimensionality of data. Classification performances were measured after applying K-Means.
