@@ -16,7 +16,7 @@ I am a Data Scientist and I code in R, Python and Wolfram Mathematica. Here you 
 
 <b> Convolutional NN Lasagne  </b> is a Convolutional Neural Network model in Lasagne to solve the MNIST task.
 
-<b> Ensembled Machine Learning is a .py file where 7 Machine Learning algorithms are used in a classification task with 3 classes and all possible hyperparameters of each algorithm are adjusted. Iris dataset of scikit-learn.
+<b> Ensembled Machine Learning </b> is a .py file where 7 Machine Learning algorithms are used in a classification task with 3 classes and all possible hyperparameters of each algorithm are adjusted. Iris dataset of scikit-learn.
 
 <img src=https://github.com/RubensZimbres/Repo-2017/raw/master/Pictures%20-%20Formulas/Ensembled.MachineLearning.png?raw=true>
 
