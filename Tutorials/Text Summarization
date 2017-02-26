@@ -1,0 +1,29 @@
+{
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "## Gaussian Naive Bayes\n",
+    "\n",
+    "Perhaps the easiest naive Bayes classifier to understand is Gaussian naive Bayes.\n",
+    "In this classifier, the assumption is that *data from each label is drawn from a simple Gaussian distribution*.\n",
+    "Imagine that you have the following data:"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 2,
+   "metadata": {
+    "collapsed": false
+   },
+   
+   {"outputs": [
+    {"metadata": {},
+     "output_type": "display_data"
+    }
+   ],
+   "source": [
+    "from sklearn.datasets import make_blobs\n",
+    "X, y = make_blobs(100, 2, centers=2, random_state=2, cluster_std=1.5)\n",
+    "plt.scatter(X[:, 0], X[:, 1], c=y, s=50, cmap='RdBu');"
+   ]
+  },
