@@ -15,70 +15,113 @@ from scipy.stats import gaussian_kde
 def norm(x):
     return (x-np.min(x))/(np.max(x)-np.min(x))
 
-look_back = 100
+look_back=20
 
-dataframe = pd.read_csv('Apple_Data_300.csv')
+dataframe = pd.read_csv('Apple_Data_300.csv').ix[0:300,:]
 dataframe.head()
-autocorrelation_plot(dataframe.ix[:,1:6])
+autocorrelation_plot(dataframe.ix[:,4])
 
 ### AVALIAR V3 LINHAS
 model00 = ARIMA(np.array(dataframe.ix[:,4]), dates=None,order=(5,1,0))
 model11 = model00.fit(disp=0)
 model11.summary()
 model11.forecast()
-resid=model11.resid
+resid9=model11.resid
 
 start=0
-end=2504
-lag=100
-xx=np.array(resid[start+lag:end])
-yy=np.array(resid[start:end-lag])
+end=len(resid9)
+lag=look_back
+xx=np.array(resid9[start+lag:end])
+yy=np.array(resid9[start:end-lag])
 autocorrelation=np.corrcoef(xx,yy)
 print('Autocorrelation of Residuals=',round(autocorrelation[0][1],3))
 
-plt.plot(resid)
+plt.plot(resid9)
 plt.title('Residuals ARIMA')
+plt.ylim(-50,50)
+plt.show()
 
-print(pd.DataFrame(resid).describe())
+plt.plot(resid9/np.array(dataframe.ix[1:,4]))
+plt.title('Residuals/Stock Value - ARIMA')
+plt.ylim(-.2,.2)
+plt.show()
 
-density = gaussian_kde(resid)
-xs = np.linspace(-50,50,len(resid))
+print(pd.DataFrame(resid9).describe())
+
+density = gaussian_kde(resid9)
+xs = np.linspace(-50,50,len(resid9))
 density.covariance_factor = lambda : .25
 density._compute_covariance()
 
 plt.plot(xs,density(xs))
 plt.show()
 
-train=dataframe.ix[500:1000,4]
+train=dataframe.ix[:,4]
+
+from statsmodels.tsa.stattools import adfuller
+rollmean = pd.rolling_mean(train, window=20)
+rollstd = pd.rolling_std(train, window=20)
+
+ts_log0 = np.log(train)
+ts_log=pd.DataFrame(ts_log0).dropna()
+from statsmodels.tsa.seasonal import seasonal_decompose
+decomposition = seasonal_decompose(np.array(ts_log).reshape(len(ts_log),),freq=100)
+
+trend = decomposition.trend
+seasonal = decomposition.seasonal
+residual = decomposition.resid
+
+z=np.where(seasonal==min(seasonal))[0]
+period=z[2]-z[1]
+
+look_back = period
+
+plt.figure(figsize=(8,8))
+plt.subplot(411)
+plt.plot(ts_log, label='Original')
+plt.legend(loc='upper left')
+plt.subplot(412)
+plt.plot(trend, label='Trend',color='red')
+plt.legend(loc='upper left')
+plt.subplot(413)
+plt.plot(seasonal,label='Seasonality',color='green')
+plt.legend(loc='upper left')
+plt.subplot(414)
+plt.plot(residual, label='Residuals',color='black')
+plt.legend(loc='upper left')
+plt.tight_layout()
 
 pred = []
 for i in range(50,len(train)):
-	modelP= ARIMA(np.array(train)[0:i], order=(5,1,0))
-	model_fit = modelP.fit(disp=0)
-	pred7 = model_fit.forecast()[0]
-	pred.append(pred7)
-	real = np.array(train)[i]
-	print('Iteration:',i-49,'Predicted=%f, Expected=%f, Error=%f' % (pred7, real,pred7-real))
+    modelP= ARIMA(np.array(train)[0:i], order=(5,1,0))
+    model_fit = modelP.fit(disp=0)
+    pred7 = model_fit.forecast()[0]
+    pred.append(pred7)
+    real = np.array(train)[i]
+    print('Iteration:',i-49,'Predicted=%f, Expected=%f, Error=%f' % (pred7, real,pred7-real))
 
-from statsmodels.tsa.stattools import adfuller
-rollmean = pd.rolling_mean(train, window=100)
-rollstd = pd.rolling_std(train, window=100)
-
-plt.figure(figsize=(9,6))
+plt.figure(figsize=(10,6))
 line1,=plt.plot(train,color='blue',label='Time Series AAPL')
 line2,=plt.plot(rollmean,color='red',label='Rolling Mean',linewidth=2)
 line3,=plt.plot(rollstd,color='green',label='Standand Deviation',linewidth=2)
-plt.legend([line1,line2,line3],loc='best')
+plt.legend([line1,line2,line3],loc='upper left')
 plt.show()
-print('Accuracy=',1-np.mean(abs(norm(np.array(dataframe.ix[50:,4]))-norm(np.array(pred).reshape(len(pred),)))))
 
 plt.plot(np.array(dataframe.ix[50:,4]),color='blue')
 plt.plot(np.array(pred).reshape(len(pred),),color='red')
 
-##### PERIODO DEFINE MELHOR A PREVISÃO
+print('Accuracy=',1-np.mean(abs(norm(np.array(dataframe.ix[50:,4]))-norm(np.array(pred).reshape(len(pred),)))))
+print('Accuracy Last:',float((np.array(train)[-1]-pred[-1])/np.array(train)[-1]))
 
-dataset = dataframe.values
+############### SVMs
+
+dataframe2 = pd.read_csv('Apple_Data_300_SVM.csv')[0:300]
+
+look_back=3
+
+dataset = dataframe2.values
 dataset = dataset.astype('float32')
+##### PERIODO DEFINE MELHOR A PREVISÃO
 numpy.random.seed(7)
 scaler = MinMaxScaler(feature_range=(0, 1))
 dataset = scaler.fit_transform(dataset)
@@ -98,24 +141,24 @@ def create_dataset(dataset, look_back=1):
 
 trainX, trainY = create_dataset(train, look_back)
 testX, testY = create_dataset(test, look_back)
-
+trainX.shape
 # reshape input to be [samples, time steps, features]
 trainY = trainY.reshape(len(trainY), 1)
 testY = testY.reshape(len(testY), 1)
 
-svr_rbf = SVR(kernel='rbf', C=1e3, gamma=.8,cache_size=look_back)
+svr_rbf = SVR(kernel='rbf', C=1e3, gamma=.008)
 model = svr_rbf.fit(trainX,trainY)
-model.get_params()
+
 trainPredict = model.predict(trainX)
 testPredict = model.predict(testX)
+trainPredict-trainY
 
 
-
-threshold=-.7
+threshold=-.9
 error0=np.mean(abs(trainPredict-trainY))
 error=error0+error0*threshold
-est_min=np.reshape([trainPredict[i]-error for i in range(0,len(trainPredict))],(len(trainY),))
-est_max=np.reshape([trainPredict[i]+error for i in range(0,len(trainPredict))],(len(trainY),))
+est_min=np.reshape([trainPredict[i]-error for i in range(0,len(trainPredict))],(trainPredict.shape[0],))
+est_max=np.reshape([trainPredict[i]+error for i in range(0,len(trainPredict))],(trainPredict.shape[0],))
 
 x = np.arange(0, len(trainPredict), 1)
 color0='lawngreen'
@@ -126,22 +169,15 @@ plt.plot(est_min,color=color0,linewidth=1)
 plt.plot(est_max,color=color0,linewidth=1)
 plt.fill_between(x,est_min,est_max,facecolor=color0,alpha=.5)
 plt.plot(trainY,linewidth=2,color='b',label='TIME SERIES')
-plt.title("Support Vector Regression\n"+"TIME SERIES PREDICTION\n"+'Error Margin: {}'.format(round(error,3)),fontweight='bold')
+plt.title("Support Vector Regression\n"+"TIME SERIES PREDICTION\n"+'Error Margin: {}'.format(round(error0,3)),fontweight='bold')
 plt.xlabel('Months')
 plt.ylabel('Sales')
 plt.show()
 
-periodo=look_back
-diff=norm(np.concatenate([trainY[i]-trainY[i-1] for i in range(1,len(trainY))]))
-average=[0]*periodo+[np.mean(trainY[i:i+periodo]) for i in range(0,len(trainY)-periodo)]
-plt.hist(trainY.ravel())
-
-plt.figure(figsize=(9,6))
 plt.plot(trainPredict,linewidth=2,color='red')
 plt.plot(trainY,linewidth=2,color='blue')
-plt.plot(average,linewidth=2,color='green',linestyle='--')
-plt.show()
 
-print('Accuracy Train:',1-np.mean(abs(trainPredict-trainY.reshape(len(trainY),))))
+print('Accuracy Train:',1-np.mean(abs(trainPredict-trainY)))
 print('Accuracy Test:',1-np.mean(abs(testPredict-testY)))
-print('Error with margin:',error)
+print('Error with margin:',error0)
+print('Difference Last:',float(trainPredict[-1]-trainY[-1]))
