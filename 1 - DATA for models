@@ -10,6 +10,8 @@ GUIDELINES:
 
 * Apple_Data_300.csv is a stock market data (date, open, close, high, low, volume) for AAPL in a 10 years interval
 
+* Apple_Data_300_SVM.csv is a stock market data (close) for AAPL in a 10 years interval
+
 * Autoencoder_04767.hdf5 is a weight file for the autoencoder model developed with Keras
 
 * Brasil.shp is a file with Brazil map, used in R file
