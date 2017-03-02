@@ -15,18 +15,19 @@ from scipy.stats import gaussian_kde
 def norm(x):
     return (x-np.min(x))/(np.max(x)-np.min(x))
 
-look_back=20
 
-dataframe = pd.read_csv('Apple_Data_300.csv').ix[0:300,:]
+dataframe = pd.read_csv('Apple_Data_300.csv').ix[0:800,:]
 dataframe.head()
 autocorrelation_plot(dataframe.ix[:,4])
+look_back=50
 
 ### AVALIAR V3 LINHAS
-model00 = ARIMA(np.array(dataframe.ix[:,4]), dates=None,order=(5,1,0))
-model11 = model00.fit(disp=0)
+model00 = ARIMA(np.array(dataframe.ix[:,4]), dates=None,order=(5,2,2))
+model11 = model00.fit(disp=1)
 model11.summary()
 model11.forecast()
 resid9=model11.resid
+np.mean(abs(resid9))/max(np.array(dataframe.ix[:,4]))
 
 start=0
 end=len(resid9)
@@ -41,12 +42,14 @@ plt.title('Residuals ARIMA')
 plt.ylim(-50,50)
 plt.show()
 
-plt.plot(resid9/np.array(dataframe.ix[1:,4]))
+plt.plot(resid9/np.array(dataframe.ix[2:,4]))
 plt.title('Residuals/Stock Value - ARIMA')
 plt.ylim(-.2,.2)
 plt.show()
 
 print(pd.DataFrame(resid9).describe())
+
+plt.hist(resid9)
 
 density = gaussian_kde(resid9)
 xs = np.linspace(-50,50,len(resid9))
@@ -56,7 +59,11 @@ density._compute_covariance()
 plt.plot(xs,density(xs))
 plt.show()
 
-train=dataframe.ix[:,4]
+### DELETE OUTLIERS
+delete=np.concatenate([np.where(resid9<np.mean(resid9)-2*np.std(resid9))[0],np.where(resid9>np.mean(resid9)+2*np.std(resid9))[0]])
+
+train0=np.delete(np.array(dataframe.ix[:,4]),delete)
+train=np.sqrt(train0)
 
 from statsmodels.tsa.stattools import adfuller
 rollmean = pd.rolling_mean(train, window=20)
@@ -91,14 +98,30 @@ plt.plot(residual, label='Residuals',color='black')
 plt.legend(loc='upper left')
 plt.tight_layout()
 
+from statsmodels.tsa.stattools import adfuller
+dftest = adfuller(train, autolag='AIC')
+dfoutput = pd.Series(dftest[0:4], index=['Test Statistic','p-value','#Lags Used','Number of Observations Used'])
+dfoutput
+'''Not Stationary'''
+
+x = seasonal
+x = x[numpy.logical_not(numpy.isnan(x))]
+dftest1 = adfuller(x, autolag='AIC')
+dfoutput1 = pd.Series(dftest1[0:4], index=['Test Statistic','p-value','#Lags Used','Number of Observations Used'])
+dfoutput1
+
 pred = []
-for i in range(50,len(train)):
-    modelP= ARIMA(np.array(train)[0:i], order=(5,1,0))
-    model_fit = modelP.fit(disp=0)
+for i in range(period,len(train)):
+    modelP= ARIMA(np.array(seasonal)[0:i], order=(2,1,0))
+    model_fit = modelP.fit(disp=-1,tol=1e-20)
     pred7 = model_fit.forecast()[0]
     pred.append(pred7)
-    real = np.array(train)[i]
-    print('Iteration:',i-49,'Predicted=%f, Expected=%f, Error=%f' % (pred7, real,pred7-real))
+
+print('Error=',float((pred[-1]**2)/train0[-1]))
+
+print('Accuracy=',1-np.mean(abs(norm(np.array(train[period:]))-norm(np.array(pred).reshape(len(pred),)))))
+print('Accuracy Last:',float((np.array(train)[-1]-pred[-1])/np.array(train)[-1]))
+
 
 plt.figure(figsize=(10,6))
 line1,=plt.plot(train,color='blue',label='Time Series AAPL')
@@ -107,77 +130,50 @@ line3,=plt.plot(rollstd,color='green',label='Standand Deviation',linewidth=2)
 plt.legend([line1,line2,line3],loc='upper left')
 plt.show()
 
-plt.plot(np.array(dataframe.ix[50:,4]),color='blue')
+plt.plot(np.array(train[50:]),color='blue')
 plt.plot(np.array(pred).reshape(len(pred),),color='red')
 
-print('Accuracy=',1-np.mean(abs(norm(np.array(dataframe.ix[50:,4]))-norm(np.array(pred).reshape(len(pred),)))))
-print('Accuracy Last:',float((np.array(train)[-1]-pred[-1])/np.array(train)[-1]))
 
 ############### SVMs
 
 dataframe2 = pd.read_csv('Apple_Data_300_SVM.csv')[0:300]
 
-look_back=3
+look_back=20
+train=np.sqrt(np.delete(np.array(dataframe.ix[0:300,4]),delete))
 
-dataset = dataframe2.values
-dataset = dataset.astype('float32')
+dataset0 = dataframe2.values
+dataset1 = dataset0.astype('float32')
 ##### PERIODO DEFINE MELHOR A PREVISÃO
 numpy.random.seed(7)
 scaler = MinMaxScaler(feature_range=(0, 1))
-dataset = scaler.fit_transform(dataset)
-train_size = int(len(dataset) * 0.8)
+dataset = scaler.fit_transform(train)
+train_size = int(len(dataset) * 1)
 test_size = len(dataset) - train_size
-train, test = dataset[0:train_size,:], dataset[train_size:len(dataset),:]
+train, test = dataset[0:train_size], dataset[train_size:len(dataset)]
 print(len(train), len(test))
 	
 def create_dataset(dataset, look_back=1):
 	dataX, dataY = [], []
 	for i in range(len(dataset)-look_back):
-		a = dataset[i:(i+look_back), 0]
+		a = dataset[i:(i+look_back)]
 		dataX.append(a)
-		dataY.append(dataset[i + look_back, 0])
+		dataY.append(dataset[i + look_back])
 	return numpy.array(dataX), numpy.array(dataY)
 
 
 trainX, trainY = create_dataset(train, look_back)
-testX, testY = create_dataset(test, look_back)
-trainX.shape
+
 # reshape input to be [samples, time steps, features]
 trainY = trainY.reshape(len(trainY), 1)
-testY = testY.reshape(len(testY), 1)
 
-svr_rbf = SVR(kernel='rbf', C=1e3, gamma=.008)
-model = svr_rbf.fit(trainX,trainY)
-
+svr_rbf = SVR(kernel='rbf', C=1e3, gamma=0.0002)
+model = svr_rbf.fit(trainX,trainY.ravel())
+model.get_params()
 trainPredict = model.predict(trainX)
-testPredict = model.predict(testX)
-trainPredict-trainY
-
-
-threshold=-.9
-error0=np.mean(abs(trainPredict-trainY))
-error=error0+error0*threshold
-est_min=np.reshape([trainPredict[i]-error for i in range(0,len(trainPredict))],(trainPredict.shape[0],))
-est_max=np.reshape([trainPredict[i]+error for i in range(0,len(trainPredict))],(trainPredict.shape[0],))
-
-x = np.arange(0, len(trainPredict), 1)
-color0='lawngreen'
-
-
-plt.figure(figsize=(9,6))
-plt.plot(est_min,color=color0,linewidth=1)
-plt.plot(est_max,color=color0,linewidth=1)
-plt.fill_between(x,est_min,est_max,facecolor=color0,alpha=.5)
-plt.plot(trainY,linewidth=2,color='b',label='TIME SERIES')
-plt.title("Support Vector Regression\n"+"TIME SERIES PREDICTION\n"+'Error Margin: {}'.format(round(error0,3)),fontweight='bold')
-plt.xlabel('Months')
-plt.ylabel('Sales')
-plt.show()
 
 plt.plot(trainPredict,linewidth=2,color='red')
 plt.plot(trainY,linewidth=2,color='blue')
+plt.show()
 
 print('Accuracy Train:',1-np.mean(abs(trainPredict-trainY)))
-print('Accuracy Test:',1-np.mean(abs(testPredict-testY)))
-print('Error with margin:',error0)
 print('Difference Last:',float(trainPredict[-1]-trainY[-1]))
