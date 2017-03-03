@@ -118,7 +118,7 @@ print('Dickey Fuller Test:\n',dfoutput1)
 
 '''TUDO ESTA AQUI'''
 train=np.sqrt(train0)
-modelP2= ARIMA(np.array(train)[-200:], order=(10,1,5))
+modelP2= ARIMA(np.array(train)[-400:], order=(2,1,0))
 model_fit2 = modelP2.fit(disp=-1,tol=1e-28,maxiter=20000)
 pred71 = model_fit2.forecast()[0]
 model_fit2.summary()
