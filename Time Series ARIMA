@@ -149,10 +149,12 @@ for i in range(1,4):
     plt.annotate('{0}%'.format(round(100*(1-(real_data/predicted_ok))[i],2)),(i-.2,136.1+.9*i))
 for k in range(0,3):
     plt.annotate('Day + {}'.format([1,2,3,4][k]),(k+.8,137.4+k))
+plt.rcParams['axes.facecolor'] = 'lawngreen'
 plt.title('ARIMA TIME SERIES PREDICTION',fontsize=20)
 plt.ylabel('Stock Value',fontsize=20)
 plt.xlabel('Future Predictions (error)',fontsize=20)
 plt.legend([line1,line2],loc='upper left')
+plt.rcParams['axes.facecolor'] = 'yellow'
 plt.show()
 
 print('ERROR:',100*(1-(real_data/predicted_ok)),'percent')
