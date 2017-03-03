@@ -18,7 +18,7 @@ def norm(x):
     return (x-np.min(x))/(np.max(x)-np.min(x))
 
 
-dataframe = pd.read_csv('Apple_Data_300.csv').ix[0:300,:]
+dataframe = pd.read_csv('Apple_Data_300.csv').ix[2100:2555,:]
 dataframe.head()
 autocorrelation_plot(dataframe.ix[:,4])
 look_back=50
@@ -50,12 +50,6 @@ plt.title('Residuals ARIMA')
 plt.ylim(-50,50)
 plt.show()
 
-### FIX
-plt.plot(resid9/np.array(dataframe.ix[2:,4]))
-plt.title('Residuals/Stock Value - ARIMA')
-plt.ylim(-.2,.2)
-plt.show()
-
 print(pd.DataFrame(resid9).describe())
 
 plt.hist(resid9)
@@ -69,10 +63,14 @@ plt.plot(xs,density(xs))
 plt.show()
 
 ### DELETE OUTLIERS
-delete=np.concatenate([np.where(resid9<np.mean(resid9)-2*np.std(resid9))[0],np.where(resid9>np.mean(resid9)+2*np.std(resid9))[0]])
+thre=1.96
+delete=np.concatenate([np.where(resid9<np.mean(resid9)-thre*np.std(resid9))[0],np.where(resid9>np.mean(resid9)+thre*np.std(resid9))[0]])
 
 train0=np.delete(np.array(dataframe.ix[:,4]),delete)
 train=np.sqrt(train0)
+
+
+plt.hist(train)
 
 rollmean = pd.rolling_mean(train, window=20)
 rollstd = pd.rolling_std(train, window=20)
@@ -117,8 +115,11 @@ dftest1 = adfuller(x, autolag='AIC')
 dfoutput1 = pd.Series(dftest1[0:4], index=['Test Statistic','p-value','#Lags Used','Number of Observations Used'])
 print('Dickey Fuller Test:\n',dfoutput1)
 
-modelP2= ARIMA(np.array(train)[0:-2], order=(10,1,5))
-model_fit2 = modelP2.fit(disp=-1,tol=1e-20,maxiter=20000)
+
+'''TUDO ESTA AQUI'''
+train=np.sqrt(train0)
+modelP2= ARIMA(np.array(train)[-200:], order=(10,1,5))
+model_fit2 = modelP2.fit(disp=-1,tol=1e-28,maxiter=20000)
 pred71 = model_fit2.forecast()[0]
 model_fit2.summary()
 
@@ -127,32 +128,26 @@ print('Error=',100*(1-float((pred71[-1]**2)/train0[-1])),'percent')
 print('Real Stock Value',train0[-1])
 print('Predicted Stock Value',pred71[-1]**2)
 
-                             ARIMA Model Results                              
-==============================================================================
-Dep. Variable:                    D.y   No. Observations:                  281
-Model:                ARIMA(10, 1, 5)   Log Likelihood                 114.440
-Method:                       css-mle   S.D. of innovations              0.159
-Date:                Thu, 02 Mar 2017   AIC                           -194.881
-Time:                        20:04:53   BIC                           -133.029
-Sample:                             1   HQIC                          -170.074
-                                                                              
-==============================================================================
+############# PLOT
 
-plt.figure(figsize=(10,6))
-line1,=plt.plot(train,color='blue',label='Time Series AAPL')
-line2,=plt.plot(rollmean,color='red',label='Rolling Mean',linewidth=2)
-line3,=plt.plot(rollstd,color='green',label='Standand Deviation',linewidth=2)
-plt.legend([line1,line2,line3],loc='upper left')
+train=np.sqrt(train0)
+for i in range(0,3):
+    modelP2= ARIMA(np.array(train)[-200:], order=(2,1,0))
+    model_fit2 = modelP2.fit(disp=-1,tol=1e-28,maxiter=100000)
+    pred71 = model_fit2.forecast()[0]
+    new=np.concatenate((train,pred71),axis=0)
+    train=new
+
+predicted=train**2
+predicted_ok=predicted[-4:]
+dataframe3 = pd.read_csv('Apple_Data_Comparison.csv')
+real_data=np.array(dataframe3.ix[2554:2557,4])
+
+plt.plot(predicted_ok,marker='o',linewidth=2,color='red')
+plt.plot(real_data,marker='o',linewidth=2,color='blue')
+plt.title('ARIMA PREDICTION')
+plt.ylabel('Stock Value')
+plt.xlabel('Future Predictions')
 plt.show()
 
-pred = []
-for i in range(period,len(train)-1):
-    modelP= ARIMA(np.array(train)[0:i], order=(2,1,0))
-    model_fit = modelP.fit(disp=0,tol=1e-20,transparams=True,trend='c')
-    pred7 = model_fit.forecast()[0]
-    pred.append(pred7)
-
-print('Error=',1-float((pred[-1]**2)/train0[-1]))
-
-plt.plot(np.array(train[period:]),color='blue')
-plt.plot(np.array(pred).reshape(len(pred),),color='red')
+print('ERROR:',100*(1-(real_data/predicted_ok)),'percent')
