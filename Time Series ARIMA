@@ -17,7 +17,6 @@ from statsmodels.tsa.seasonal import seasonal_decompose
 def norm(x):
     return (x-np.min(x))/(np.max(x)-np.min(x))
 
-
 dataframe = pd.read_csv('Apple_Data_300.csv').ix[2100:2555,:]
 dataframe.head()
 autocorrelation_plot(dataframe.ix[:,4])
@@ -116,7 +115,6 @@ dfoutput1 = pd.Series(dftest1[0:4], index=['Test Statistic','p-value','#Lags Use
 print('Dickey Fuller Test:\n',dfoutput1)
 
 
-'''TUDO ESTA AQUI'''
 train=np.sqrt(train0)
 modelP2= ARIMA(np.array(train)[-400:], order=(2,1,0))
 model_fit2 = modelP2.fit(disp=-1,tol=1e-28,maxiter=20000)
@@ -143,11 +141,18 @@ predicted_ok=predicted[-4:]
 dataframe3 = pd.read_csv('Apple_Data_Comparison.csv')
 real_data=np.array(dataframe3.ix[2554:2557,4])
 
-plt.plot(predicted_ok,marker='o',linewidth=2,color='red')
-plt.plot(real_data,marker='o',linewidth=2,color='blue')
-plt.title('ARIMA PREDICTION')
-plt.ylabel('Stock Value')
-plt.xlabel('Future Predictions')
+plt.figure(figsize=(8,5))
+line1,=plt.plot(predicted_ok,marker='o',linewidth=2,color='red',label='PREDICTION')
+line2,=plt.plot(real_data,marker='o',linewidth=2,color='blue',label='REAL STOCK VALUE')
+plt.annotate('TODAY',(0,136.8))
+for i in range(1,4):
+    plt.annotate('{0}%'.format(round(100*(1-(real_data/predicted_ok))[i],2)),(i-.2,136.1+.9*i))
+for k in range(0,3):
+    plt.annotate('Day + {}'.format([1,2,3,4][k]),(k+.8,137.4+k))
+plt.title('ARIMA TIME SERIES PREDICTION',fontsize=20)
+plt.ylabel('Stock Value',fontsize=20)
+plt.xlabel('Future Predictions (error)',fontsize=20)
+plt.legend([line1,line2],loc='upper left')
 plt.show()
 
 print('ERROR:',100*(1-(real_data/predicted_ok)),'percent')
