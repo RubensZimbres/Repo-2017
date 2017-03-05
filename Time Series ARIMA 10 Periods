@@ -130,6 +130,20 @@ print('Predicted Stock Value',pred71[-1]/seasonal[-1])
 ##############
 
 train=train0*seasonal
+
+x = train0*seasonal
+x = x[numpy.logical_not(numpy.isnan(x))]
+dftest1 = adfuller(x, autolag='AIC')
+dfoutput1 = pd.Series(dftest1[0:4], index=['Test Statistic','p-value','#Lags Used','Number of Observations Used'])
+print('Dickey Fuller Test:\n',dfoutput1)
+
+Dickey Fuller Test:
+ Test Statistic                -1.206434e+01
+p-value                        2.428245e-22
+#Lags Used                     2.700000e+01
+Number of Observations Used    2.509000e+03
+dtype: float64
+
 for i in range(0,10):
     if i<2:
         modelP2= ARIMA(np.array(train)[-100:], order=(1,1,0))
