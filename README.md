@@ -80,7 +80,11 @@ I am a Data Scientist and I code in R, Python and Wolfram Mathematica. Here you 
 
 <b> Text-to-Speech  </b> is a .py file where Python speaks any given text and saves it as an audio .wav file.
 
+<b> Time Series ARIMA </b>  is a ARIMA model to forecast time series, with an error margin of 0.2%.
+
 <b> Time Series Prediction with Neural Networks - Keras </b>  is a Neural Network model to forecast time series, using Keras with an adaptive learning rate depending upon derivative of loss.
+
+<img src=https://github.com/RubensZimbres/Repo-2017/blob/master/Pictures%20-%20Formulas/ARIMA.10Period.png?raw=true> 
 
 <b> Variational Autoencoder  </b> is a VAE made with Keras.
 
