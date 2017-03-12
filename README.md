@@ -40,6 +40,8 @@ I am a Data Scientist and I code in R, Python and Wolfram Mathematica. Here you 
 
 <b> NLP Consumer Complaint  </b> is a model where Facebook posts of a U.S. computer retailer were scraped, tokenized, lemmatized and applied Word2Vec. After that, t-SNE and Latent Dirichlet Allocation were developed in order to classify the arguments and weights of each keyword used by a consumer in his complaint. The code also analyzes frequency of words in 100 posts.
 
+<b> NLP Convolutional Neural Network </b> is a Convolutional Neural Network for Text in order to classify movie reviews.
+
 <b> NLP Doc2Vec  </b> is a Natural Language Procesing file where cosine similarity among phrases is measured through Doc2Vec.
 
 <b> NLP Document Classification  </b> is a code for Document Classification according to Latent Dirichlet Allocation.
