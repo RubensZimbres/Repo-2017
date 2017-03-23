@@ -18,7 +18,9 @@ I am a Data Scientist and I code in R, Python and Wolfram Mathematica. Here you 
 
 <b> Ensembled Machine Learning </b> is a .py file where 7 Machine Learning algorithms are used in a classification task with 3 classes and all possible hyperparameters of each algorithm are adjusted. Iris dataset of scikit-learn.
 
+<p align="center">
 <img src=https://github.com/RubensZimbres/Repo-2017/raw/master/Pictures%20-%20Formulas/Ensembled.MachineLearning.png?raw=true>
+</p>
 
 <b> Hyperparameter Tuning RL  </b> is a model where hyperparameters of Neural Networks are adjusted via Reinforcement Learning. According to a reward, hyperparameter tuning (environment) is changed through a policy (mechanization of knowledge) using the Boston Dataset. Hyperparameters tuned are: learning rate, epochs, decay, momentum, number of hidden layers and nodes and initial weights.
 
@@ -32,7 +34,9 @@ I am a Data Scientist and I code in R, Python and Wolfram Mathematica. Here you 
 
 <b> Neural Networks for Regression  </b> shows multiple solutions for a regression problem, solved with sklearn, Keras, Theano and Lasagne. It uses the Boston dataset sample file from sklearn and reaches more than 98% accuracy.
 
+<p align="center">
 <img src=https://github.com/RubensZimbres/Repo-2017/raw/master/Pictures%20-%20Formulas/HiddenLayers.jpg?raw=true>
+</p>
 
 <b> NLP + Naive Bayes Classifier  </b> is a model where movie reviews were labeled as positive and negative and the algorithm then classifies a totally new set of reviews using Logistic Regression, Decision Trees and Naive Bayes, reaching an accuracy of 92%.
 
@@ -86,7 +90,9 @@ I am a Data Scientist and I code in R, Python and Wolfram Mathematica. Here you 
 
 <b> Time Series Prediction with Neural Networks - Keras </b>  is a Neural Network model to forecast time series, using Keras with an adaptive learning rate depending upon derivative of loss.
 
+<p align="center">
 <img src=https://github.com/RubensZimbres/Repo-2017/blob/master/Pictures%20-%20Formulas/ARIMA.10Period.png?raw=true> 
+</p>
 
 <b> Variational Autoencoder  </b> is a VAE made with Keras.
 
@@ -98,6 +104,10 @@ I am a Data Scientist and I code in R, Python and Wolfram Mathematica. Here you 
 
 <b> t-SNE PCA LDA embeddings </b> is a model where t-SNE, Principal Components Analysis, Linear Discriminant Analysis and Random Forest embeddings are compared in a task to classify clusters of similar digits.
 
+<p align="center">
 <img src=https://github.com/RubensZimbres/Repo-2017/raw/master/Pictures%20-%20Formulas/Doc2Vec.png?raw=true>
+</p>
 
+<p align="center">
 <img src=https://github.com/RubensZimbres/Repo-2017/raw/master/Pictures%20-%20Formulas/t_SNE_Lk.png?raw=true>
+</p>
