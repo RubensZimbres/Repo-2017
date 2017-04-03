@@ -135,7 +135,7 @@ cc=model3.predict(X)
 
 fig = plt.figure(figsize=(9,4))
 plt.title('TEXT RATIONALITY - Structure of Arguments (0,1)\n'+'WIKIPEDIA webpage Statistical Inference\n'+'Gensim Only 1 Topic',fontweight="bold")
-plt.scatter(X_tsne[:, 0], X_tsne[:, 1], c='',marker='.', s=2,label='Topic {0})'.format(cc))
+plt.scatter(X_tsne[:, 0], X_tsne[:, 1], c=cc,marker='.', s=2,label='Topic {0})'.format(cc))
 for i in range(0,len(cc)):
     plt.annotate('{}'.format(cc[i]),(X_tsne[:, 0][i], X_tsne[:, 1][i]),fontweight="bold",color='rgbck'[cc[i]])
 plt.show()
@@ -168,13 +168,14 @@ lsi.print_topics(1)
 from scipy.cluster.hierarchy import dendrogram, linkage
 
 P = linkage(matrix3, 'ward')
+
 from scipy.cluster.hierarchy import cophenet
 from scipy.spatial.distance import pdist
 
-corr, coph_distancess = cophenet(P, pdist(matrix3))
+corr, coph_distances = cophenet(P, pdist(matrix3))
 corr
-P
-plt.figure(figsize=(9,8))
+
+plt.figure(figsize=(9,4))
 plt.title('Hierarchical Clustering Dendrogram')
 plt.xlabel('PARAGRAPH')
 plt.ylabel('DISTANCE')
@@ -187,7 +188,7 @@ model00=[]
 for i in range(0,len(sentences)):
     tokens = word_tokenize(str(sentences[i]))
     
-    long_words = [w for w in tokens if 4<len(w) < 13]
+    long_words = [w for w in tokens if len(w)>6]
     
     texts = [[word for word in document.lower().split() if word not in stoplist]
         for document in long_words]
@@ -227,12 +228,40 @@ for i in range(0,len(sentences)):
 P
 x = np.array(range(len(sp)))
 
-plt.figure(figsize=(9,8))
+plt.figure(figsize=(8,4))
 plt.title('Hierarchical Clustering Dendrogram\n'+'Obtained via LDA of Paragraphs in Text Summarization')
 plt.xlabel('\nPARAGRAPHS KEYWORDS')
 plt.ylabel('DISTANCE - SUMMARIZATION')
 dendrogram(P,
     leaf_rotation=40.,
-    leaf_font_size=10.,)
+    leaf_font_size=10.,color_threshold=1,)
 plt.xticks(3+x*10,sp)
 plt.show()
+
+plt.figure(figsize=(8,4))
+plt.title('Hierarchical Clustering Dendrogram\n'+'Obtained via LDA of Paragraphs in Text Summarization')
+plt.xlabel('\nPARAGRAPHS KEYWORDS')
+plt.ylabel('DISTANCE - SUMMARIZATION')
+dendrogram(P,
+    leaf_rotation=0.,
+    leaf_font_size=10.,color_threshold=12,)
+plt.show()
+
+#clusters
+from scipy.cluster.hierarchy import fcluster
+max_d = 1
+clusters = fcluster(P, max_d, criterion='distance')
+clusters
+
+plt.figure(figsize=(9, 3.5))
+plt.scatter(X_tsne[:,0], X_tsne[:,1], c=clusters, cmap='prism',s=400)
+for i in range(0,len(sentences)):
+    plt.annotate(sp[i],xy=(X_tsne[:,0][i],X_tsne[:,1][i]),xytext=(X_tsne[:,0][i]+8,X_tsne[:,1][i]+20))
+plt.title('Cluster of topics via Dendrogram + LDA')
+plt.show()
+
+sa=[]
+for i in range(1,max(clusters)+1):
+    sa.append(np.where(clusters==i)[0])
+sa
+for x in range(len(sa)):[print('Cluster {0}:'.format(x),sentences[i]) for i in sa[x]]
