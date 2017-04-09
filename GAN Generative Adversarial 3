@@ -192,12 +192,63 @@ gan_level2 = discriminator(generator(gan_input))
 GAN = Model(gan_input, gan_level2)
 GAN.compile(loss='categorical_crossentropy', optimizer='adam')
 
-filepath="CNN_NOISY-{loss:.4f}.hdf5"
-checkpoint_stacked = ModelCheckpoint(filepath, monitor='binary_crossentropy', verbose=1, save_best_only=True)
+filepath="CNN_STACKED-{loss:.4f}.hdf5"
+checkpoint_stacked = ModelCheckpoint(filepath, monitor='binary_crossentropy', verbose=1, save_best_only=False)
 
 GAN.fit(x_train.reshape((1,28,28,1)), Y_train.reshape((1,10)), batch_size=batch_size, nb_epoch=2,
           verbose=1,callbacks=[history,lrate,checkpoint_stacked])
 
+filename = "CNN_STACKED-2.2547.hdf5"
+GAN.load_weights(filename)
+GAN.compile(loss='binary_crossentropy', optimizer='adam')
+
+
 bb=GAN.predict(x_test.reshape((1,28,28,1)))
 c=np.where(bb[0]==np.max(bb))[0]
 Y_train[0][c]
+
+b=[float(i) for i in history.losses]
+plt.plot(b,color='r',linewidth=3)
+plt.title("LOSS HISTORY")
+plt.show()
+
+GAN.get_weights()
+
+GAN.summary()
+
+from __future__ import print_function
+
+import h5py
+
+def print_structure(weight_file_path):
+    """
+    Prints out the structure of HDF5 file.
+
+    Args:
+      weight_file_path (str) : Path to the file to analyze
+    """
+    f = h5py.File(weight_file_path)
+    try:
+        if len(f.attrs.items()):
+            print("{} contains: ".format(weight_file_path))
+            print("Root attributes:")
+        for key, value in f.attrs.items():
+            print("  {}: {}".format(key, value))
+
+        if len(f.items())==0:
+            return 
+
+        for layer, g in f.items():
+            print("  {}".format(layer))
+            print("    Attributes:")
+            for key, value in g.attrs.items():
+                print("      {}: {}".format(key, value))
+
+            print("    Dataset:")
+            for p_name in g.keys():
+                param = g[p_name]
+                print("      {}: {}".format(p_name, np.array(param).shape))
+    finally:
+        f.close()
+        
+print_structure('CNN_STACKED-2.2547.hdf5')
