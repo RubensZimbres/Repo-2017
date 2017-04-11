@@ -8,6 +8,8 @@ from sklearn.preprocessing import StandardScaler
 from sklearn import preprocessing
 from keras.layers.normalization import BatchNormalization
 from sklearn.preprocessing import MinMaxScaler
+import pandas as pd
+import numpy as np
 
 from sklearn import datasets
 
