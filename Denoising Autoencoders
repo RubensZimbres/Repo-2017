@@ -10,17 +10,16 @@ from keras.datasets import mnist
 from keras.layers.core import Reshape
 from __future__ import print_function
 import numpy as np
-np.random.seed(1337)
 from keras.datasets import mnist
 from keras.models import Sequential
 from keras.layers import Dense, Dropout, Activation, Flatten
 from keras.layers import Convolution2D, MaxPooling2D
 from keras.layers.convolutional import Convolution2D, MaxPooling2D, ZeroPadding2D, UpSampling2D
 from keras.utils import np_utils
-from keras import backend as K
 from keras.layers.normalization import BatchNormalization
 from keras.callbacks import ModelCheckpoint,LearningRateScheduler
 import os
+from keras.optimizers import SGD
 os.environ["KERAS_BACKEND"] = "theano"
 #os.environ["THEANO_FLAGS"]  = "device=gpu%d,lib.cnmem=0"%(random.randint(0,3))
 
@@ -33,7 +32,7 @@ x_test = x_test.reshape((len(x_test), np.prod(x_test.shape[1:])))
 x_train=x_train[1:2]
 x_test=x_test[1:2]
 
-noise_factor = 0.5
+noise_factor = 0.4
 x_train_noisy = x_train + noise_factor * np.random.normal(loc=0.0, scale=1.0, size=x_train.shape) 
 x_test_noisy = x_test + noise_factor * np.random.normal(loc=0.0, scale=1.0, size=x_test.shape) 
 
@@ -50,7 +49,7 @@ n = 1
 plt.figure(figsize=(10, 2))
 for i in range(0,n):
     ax = plt.subplot(1, n, i+1)
-    plt.imshow(x_test_noisy[i].reshape(28, 28))
+    plt.imshow(x_train_noisy[i].reshape(28, 28))
     plt.gray()
     ax.get_xaxis().set_visible(False)
     ax.get_yaxis().set_visible(False)
@@ -58,8 +57,6 @@ plt.show()
 
 batch_size = 1
 nb_classes = 10
-nb_epoch = 1
-
 
 img_rows, img_cols = 28, 28
 
@@ -68,6 +65,12 @@ nb_filters = 32
 pool_size = (2, 2)
 
 kernel_size = (3, 3)
+input_shape=(28,28,1)
+
+learning_rate = 0.07
+decay_rate = 5e-5
+momentum = 0.9
+
 
 denoise = Sequential()
 denoise.add(Convolution2D(20, 1,1,
@@ -75,32 +78,38 @@ denoise.add(Convolution2D(20, 1,1,
                         input_shape=input_shape))
 denoise.add(BatchNormalization(mode=2))
 denoise.add(Activation('relu'))
-denoise.add(UpSampling2D(size=(2, 2)))
-denoise.add(Convolution2D(40, 1, 1,
+denoise.add(Convolution2D(32, 1, 1,
                             init='glorot_uniform'))
 denoise.add(BatchNormalization(mode=2))
 denoise.add(Activation('relu'))
+denoise.add(Convolution2D(32, 1, 1,init='glorot_uniform'))
+denoise.add(BatchNormalization(mode=2))
+denoise.add(Activation('relu'))
 denoise.add(Convolution2D(1, 1, 1,init='glorot_uniform'))
 denoise.add(BatchNormalization(mode=2))
 denoise.add(Activation('relu'))
-denoise.add(Reshape((28,28,4)))
-denoise.add(Convolution2D(1, 1, 1,init='glorot_uniform'))
-denoise.add(BatchNormalization(mode=2))
-denoise.add(Activation('relu'))
-denoise.compile(loss='binary_crossentropy', optimizer='adam')
+sgd = SGD(lr=learning_rate,momentum=momentum, decay=decay_rate, nesterov=False)
+
+denoise.compile(loss='mean_squared_error', optimizer=sgd,metrics = ['accuracy'])
 
 denoise.summary()
 
 denoise.fit(x_train_noisy, x_train,
-                nb_epoch=1,
-                batch_size=128,
-                shuffle=True,
-                validation_data=(x_test_noisy, x_test))
+                nb_epoch=50,
+                batch_size=30,verbose=1)
                 
 a=denoise.predict(x_train_noisy)
-ax = plt.subplot(1, n, i+1)
+
+plt.figure(figsize=(10, 10))
+ax = plt.subplot(1, 2, 1)
+plt.imshow(x_train_noisy.reshape(28, 28))
+plt.gray()
+ax.get_xaxis().set_visible(False)
+ax.get_yaxis().set_visible(False)
+ax = plt.subplot(1, 2, 2)
 plt.imshow(a.reshape(28, 28))
 plt.gray()
 ax.get_xaxis().set_visible(False)
 ax.get_yaxis().set_visible(False)
 plt.show()
+
