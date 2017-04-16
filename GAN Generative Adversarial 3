@@ -94,25 +94,25 @@ def step_decay(losses):
         return lrate
 
 generator = Sequential()
-generator.add(Convolution2D(20, 1,1,
+generator.add(Convolution2D(20, 3,3,
                         border_mode='valid',
                         input_shape=input_shape))
 generator.add(BatchNormalization(mode=2))
 generator.add(Activation('relu'))
 generator.add(UpSampling2D(size=(2, 2)))
-generator.add(Convolution2D(40, 1, 1,
+generator.add(Convolution2D(20, 3, 3,
                             init='glorot_uniform'))
 generator.add(BatchNormalization(mode=2))
 generator.add(Activation('relu'))
-generator.add(Convolution2D(1, 1, 1,init='glorot_uniform'))
+generator.add(Convolution2D(20, 3, 3,init='glorot_uniform'))
 generator.add(BatchNormalization(mode=2))
 generator.add(Activation('relu'))
-generator.add(Reshape((28,28,4)))
-generator.add(Convolution2D(1, 1, 1,init='glorot_uniform'))
+generator.add(MaxPooling2D(pool_size=(3,3)))
+generator.add(Convolution2D(4, 3, 3,init='glorot_uniform'))
 generator.add(BatchNormalization(mode=2))
 generator.add(Activation('relu'))
+generator.add(Reshape((28,28,1)))
 generator.compile(loss='binary_crossentropy', optimizer='adam')
-
 generator.summary()
 
 
@@ -199,34 +199,31 @@ GAN.fit(x_train.reshape((1,28,28,1)), Y_train.reshape((1,10)), batch_size=batch_
           verbose=1,callbacks=[history,lrate,checkpoint_stacked])
 
 filename = "CNN_STACKED-2.2547.hdf5"
+
 GAN.load_weights(filename)
 GAN.compile(loss='binary_crossentropy', optimizer='adam')
-
 
 bb=GAN.predict(x_test.reshape((1,28,28,1)))
 c=np.where(bb[0]==np.max(bb))[0]
 Y_train[0][c]
 
-b=[float(i) for i in history.losses]
-plt.plot(b,color='r',linewidth=3)
-plt.title("LOSS HISTORY")
-plt.show()
+### YESSSS
+noise = np.random.uniform(0,1,size=[1,784]).reshape((1,28,28,1))
+generated_images = generator.predict(noise)
+plt.imshow(generated_images.reshape((28,28)),cmap='Greys')
+plt.imshow(X_train.reshape((28,28)),cmap='Greys')
 
-GAN.get_weights()
+GAN.get_config()
 
 GAN.summary()
+
+GAN.get_weights()
 
 from __future__ import print_function
 
 import h5py
 
 def print_structure(weight_file_path):
-    """
-    Prints out the structure of HDF5 file.
-
-    Args:
-      weight_file_path (str) : Path to the file to analyze
-    """
     f = h5py.File(weight_file_path)
     try:
         if len(f.attrs.items()):
