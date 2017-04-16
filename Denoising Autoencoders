@@ -73,25 +73,27 @@ momentum = 0.9
 
 
 denoise = Sequential()
-denoise.add(Convolution2D(20, 1,1,
+denoise.add(Convolution2D(20, 3,3,
                         border_mode='valid',
                         input_shape=input_shape))
 denoise.add(BatchNormalization(mode=2))
 denoise.add(Activation('relu'))
-denoise.add(Convolution2D(32, 1, 1,
+denoise.add(UpSampling2D(size=(2, 2)))
+denoise.add(Convolution2D(20, 3, 3,
                             init='glorot_uniform'))
 denoise.add(BatchNormalization(mode=2))
 denoise.add(Activation('relu'))
-denoise.add(Convolution2D(32, 1, 1,init='glorot_uniform'))
+denoise.add(Convolution2D(20, 3, 3,init='glorot_uniform'))
 denoise.add(BatchNormalization(mode=2))
 denoise.add(Activation('relu'))
-denoise.add(Convolution2D(1, 1, 1,init='glorot_uniform'))
+denoise.add(MaxPooling2D(pool_size=(3,3)))
+denoise.add(Convolution2D(4, 3, 3,init='glorot_uniform'))
 denoise.add(BatchNormalization(mode=2))
 denoise.add(Activation('relu'))
+denoise.add(Reshape((28,28,1)))
 sgd = SGD(lr=learning_rate,momentum=momentum, decay=decay_rate, nesterov=False)
 
 denoise.compile(loss='mean_squared_error', optimizer=sgd,metrics = ['accuracy'])
-
 denoise.summary()
 
 denoise.fit(x_train_noisy, x_train,
@@ -112,4 +114,3 @@ plt.gray()
 ax.get_xaxis().set_visible(False)
 ax.get_yaxis().set_visible(False)
 plt.show()
-
