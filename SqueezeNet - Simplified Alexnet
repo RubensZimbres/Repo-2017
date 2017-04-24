@@ -1,3 +1,5 @@
+'''adapted from https://arxiv.org/pdf/1602.07360.pdf'''
+
 import keras
 import numpy as np
 from keras.layers import Input, Dense, Lambda, Merge
@@ -16,6 +18,7 @@ from keras.optimizers import SGD
 from keras.layers.advanced_activations import ELU
 from keras.layers.pooling import GlobalAveragePooling2D
 import pandas as pd
+import matplotlib.pyplot as plt
 
 (x_train, y_train), (x_test, y_test) = mnist.load_data()
 
@@ -28,16 +31,6 @@ x_train_CNN=x_train[1:2]
 
 y_train1=pd.get_dummies(y_train[1:2]).T
 y_train2=y_train1
-
-n = 10
-plt.figure(figsize=(10, 2))
-for i in range(0,n):
-    ax = plt.subplot(1, n, i+1)
-    plt.imshow(x_train0[i].reshape(28, 28))
-    plt.gray()
-    ax.get_xaxis().set_visible(False)
-    ax.get_yaxis().set_visible(False)
-plt.show()
 
 epochs=3
 learning_rate = 0.07
@@ -63,8 +56,8 @@ squeeze.add(BatchNormalization(mode=2))
 squeeze.add(ELU(alpha=1.0))
 
 squeeze_left=squeeze
-squeeze_left.add(Convolution2D(2, 1,1,
-                          border_mode='same',
+squeeze_left.add(Convolution2D(2, 3,3,
+                          border_mode='valid',
                         input_shape=input_shape))
 squeeze_left.add(ELU(alpha=1.0))
 
