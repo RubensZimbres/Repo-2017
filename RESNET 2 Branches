@@ -35,10 +35,13 @@ sgd = SGD(lr=learning_rate,momentum=momentum, decay=decay_rate, nesterov=False)
 model_left=Sequential()
 model_left.add(Dense(5, input_dim=4, init='glorot_uniform'))
 model_left.add(Activation('relu'))
+model_left.add(BatchNormalization(mode=2))
 model_left.add(Dense(5))
 model_left.add(Activation('relu'))
+model_left.add(BatchNormalization(mode=2))
 model_left.add(Dense(3))
 model_left.add(Activation('sigmoid'))
+model_left.add(BatchNormalization(mode=2))
 model_left.add(Dense(4))
 
 for i in range(0,6):
@@ -57,13 +60,16 @@ loss=iris.target-pred
 loss=loss.astype('float32')
 
 model_right.add(Lambda(lambda x: x-np.mean(loss),input_shape=(4,),output_shape=(4,)))
+model_right.add(BatchNormalization(mode=2))
 
 model2=Sequential()
 model2.add(Merge([model_left,model_right],mode = 'concat'))
 model2.add(Activation('relu'))
 model2.add(Reshape((8,)))
+model2.add(BatchNormalization(mode=2))
 model2.add(Dense(3))
 model2.add(Activation('sigmoid'))
+model2.add(BatchNormalization(mode=2))
 model2.add(Dense(4))
 
 for i in range(0,6):
@@ -74,11 +80,13 @@ part=4
 model2.layers[part].name
 
 model_right2.add(Lambda(lambda x: x-np.mean(loss),input_shape=(4,),output_shape=(4,)))
+model_right2.add(BatchNormalization(mode=2))
 
 model22=Sequential()
 model22.add(Merge([model2,model_right2],mode = 'concat'))
 model22.add(Activation('relu'))
 model22.add(Reshape((8,)))
+model22.add(BatchNormalization(mode=2))
 model22.add(Dense(3))
 model22.add(Activation('sigmoid'))
 
@@ -86,7 +94,7 @@ model22.compile(loss = 'binary_crossentropy', optimizer = sgd, metrics = ['accur
 model22.summary()
 
 model22.fit([X_train2,X_train2,X_train2], Y_train, 
-           batch_size = 30, nb_epoch = 1000, verbose = 1)
+           batch_size = 30, nb_epoch = 200, verbose = 1)
 
 res2 = model22.predict_classes([X_train2,X_train2,X_train2])
 acc2=((res2-iris.target)==0).sum()/len(res2)
