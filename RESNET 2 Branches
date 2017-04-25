@@ -14,6 +14,7 @@ import matplotlib.pyplot as plt
 from sklearn import datasets
 import keras.backend as K
 from keras.layers.core import Reshape
+from keras.callbacks import ModelCheckpoint
 
 iris = datasets.load_iris()
 
@@ -93,12 +94,19 @@ model22.add(Activation('sigmoid'))
 model22.compile(loss = 'binary_crossentropy', optimizer = sgd, metrics = ['accuracy'])
 model22.summary()
 
-model22.fit([X_train2,X_train2,X_train2], Y_train, 
-           batch_size = 30, nb_epoch = 200, verbose = 1)
+filepath="RESNET-{loss:.4f}.hdf5"
+checkpoint = ModelCheckpoint(filepath, monitor='loss', verbose=1, save_best_only=True)
 
-res2 = model22.predict_classes([X_train2,X_train2,X_train2])
-acc2=((res2-iris.target)==0).sum()/len(res2)
-acc2
+model22.fit([X_train2,X_train2,X_train2], Y_train, 
+           batch_size = 30, nb_epoch = 10, verbose = 1,callbacks=[checkpoint])
+
+filename = "RESNET-0.0126.hdf5"
+model22.load_weights(filename)
+model22.compile(loss='binary_crossentropy', optimizer='rmsprop')
+
+res22 = model22.predict_classes([X_train2,X_train2,X_train2])
+acc22=((res22-iris.target)==0).sum()/len(res22)
+acc22
 
 '''pip install pydot-ng + download Graphviz'''
 
