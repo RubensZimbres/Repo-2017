@@ -23,6 +23,8 @@ Keras version used in models: keras==1.1.0
 <img src=https://github.com/RubensZimbres/Repo-2017/raw/master/Pictures%20-%20Formulas/Ensembled.MachineLearning.png?raw=true>
 </p>
 
+<b> GAN Generative Adversarial  </b> are models of Generative Adversarial Neural Networks.
+
 <b> Hyperparameter Tuning RL  </b> is a model where hyperparameters of Neural Networks are adjusted via Reinforcement Learning. According to a reward, hyperparameter tuning (environment) is changed through a policy (mechanization of knowledge) using the Boston Dataset. Hyperparameters tuned are: learning rate, epochs, decay, momentum, number of hidden layers and nodes and initial weights.
 
 <b> Keras Regularization L2  </b> is a Neural Network model for regression made with Keras where a L2 regularization was applied to prevent overfitting.
@@ -79,7 +81,11 @@ Keras version used in models: keras==1.1.0
 
 <b> REAL-TIME Twitter Analysis  </b> is a model where Twitter streaming is extracted, words and sentences tokenized, word embeddings were created, topic modeling was made and classified using K-Means. Then, NLTK SentimentAnalyzer was used to classify each sentence of the streaming into positive, neutral or negative. Accumulated sum was used to generate the plot and the code loops each 1 second, collecting new tweets.
 
+<b> RESNET-2  </b> is a Deep Residual Neural Network.
+
 <b> ROC Curve Multiclass  </b> is a .py file where Naive Bayes was used to solve the IRIS Dataset task and ROC curve of different classes are plotted.
+
+<b> SQUEEZENET  </b> is a simplified version of the AlexNet.
 
 <b> Stacked Machine Learning  </b> is a .py notebook where t-SNE, Principal Components Analysis and Factor Analysis were applied to reduce dimensionality of data. Classification performances were measured after applying K-Means.
 
@@ -112,3 +118,8 @@ Keras version used in models: keras==1.1.0
 <p align="center">
 <img src=https://github.com/RubensZimbres/Repo-2017/raw/master/Pictures%20-%20Formulas/t_SNE_Lk.png?raw=true>
 </p>
+
+<p align="center">
+<img src=https://github.com/RubensZimbres/Repo-2017/blob/master/Pictures%20-%20Formulas/RESNET_Me.jpg?raw=true>
+</p>
+
