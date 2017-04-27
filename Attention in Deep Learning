@@ -78,20 +78,25 @@ pool_size = (2, 2)
 kernel_size = (3, 3)
 input_shape=(shape,shape,1)
 
-learning_rate = 0.03
+learning_rate = 0.023
 decay_rate = 5e-5
 momentum = 0.9
 sgd = SGD(lr=learning_rate,momentum=momentum, decay=decay_rate, nesterov=False)
 
-part=0
-thre=4.5
+def norm(x):
+    return (x-np.min(x))/(np.max(x)-np.min(x))
+
+part=1
+thre=1
 recog = Sequential()
 recog.add(Convolution2D(20, 3,3,
                         border_mode='valid',
                         input_shape=input_shape))
+recog.add(BatchNormalization(mode=1))
 c=get_0_layer_output=K.function([recog.layers[0].input, 
-                                 K.learning_phase()],[recog.layers[part].output]);c=get_0_layer_output([img2[0].reshape(1,shape,shape,1), 0])[0][0];c[c>(np.mean(c)/2)]=0
-
+                                 K.learning_phase()],[recog.layers[part].output]);c=get_0_layer_output([img2[0].reshape(1,shape,shape,1), 0])[0][0];c[c>.01*np.min(c)]=1
+recog.add(BatchNormalization(mode=2))
+recog.add(Activation('sigmoid'))
 recog.add(Lambda(lambda x: x+thre*c,output_shape=(26,26,20)))
 recog.add(BatchNormalization(mode=2))
 recog.add(MaxPooling2D(pool_size=(3,3)))
@@ -114,7 +119,7 @@ recog.compile(loss='mean_squared_error', optimizer=sgd,metrics = ['mae'])
 recog.summary()
 
 recog.fit(img2[1].reshape(1,shape,shape,1), img2[1].reshape(1,shape,shape,1),
-                nb_epoch=10,
+                nb_epoch=100,
                 batch_size=30,verbose=1)
 
 a=recog.predict(img2[1].reshape(1,shape,shape,1))
@@ -125,19 +130,31 @@ colors = [(0, 0, 0), (0, 1, 0), (0, 0, 1),(1,1,0)]
 cm = LinearSegmentedColormap.from_list(
         a, colors, N=2)
 
-plt.figure(figsize=(6,6))
-ax = plt.subplot(1, 2, 1)
+colors2 = [(0, 0, 0), (0, 1, 0), (0, 0, 1),(1,0,0)] 
+cm2 = LinearSegmentedColormap.from_list(
+        a, colors2, N=2)
+
+plt.figure(figsize=(10,10))
+ax = plt.subplot(1, 3, 1)
+plt.imshow(img2[1].reshape((28,28)))
+plt.gray()
+plt.title('Original')
+ax.get_xaxis().set_visible(False)
+ax.get_yaxis().set_visible(False)
+ax = plt.subplot(1, 3, 2)
+plt.imshow(a.reshape((shape,shape)),cmap=cm2)
+plt.title('Attention')
+ax.get_xaxis().set_visible(False)
+ax.get_yaxis().set_visible(False)
+ax = plt.subplot(1, 3, 3)
 plt.imshow(img2[1].reshape((28,28)))
 ax.get_xaxis().set_visible(False)
 ax.get_yaxis().set_visible(False)
-ax = plt.subplot(1, 2, 2)
-plt.imshow(img2[1].reshape((28,28)))
+ax = plt.subplot(1, 3, 3)
+plt.imshow(a.reshape((shape,shape)),cmap=cm,alpha=0.35,interpolation='nearest')
 ax.get_xaxis().set_visible(False)
 ax.get_yaxis().set_visible(False)
-ax = plt.subplot(1, 2, 2)
-plt.imshow(a.reshape((shape,shape)),cmap=cm,alpha=0.55)
-ax.get_xaxis().set_visible(False)
-ax.get_yaxis().set_visible(False)
+plt.title('MASK')
 plt.show()
 
-print('threshold=',thre,'4.5 best')
+print('threshold=',thre)
