@@ -15,22 +15,26 @@ from sklearn import datasets
 import keras.backend as K
 from keras.layers.core import Reshape
 from keras.callbacks import ModelCheckpoint
+from sklearn.utils import shuffle
 
 iris = datasets.load_iris()
 
-learning_rate = 0.01
+learning_rate = 0.009
 decay_rate = 5e-6
 momentum = 0.9
 epochs=50
 
 scaler = MinMaxScaler(feature_range=(0, 1))
 
-X_train=scaler.fit_transform(iris.data[:,1:4])
 X_train2=scaler.fit_transform(iris.data[:,0:4])
+Y_train = np.array(iris.target).reshape((150,1))
 
-Y_train = np.array(pd.get_dummies(iris.target))
+data=pd.DataFrame(np.concatenate((X_train2,Y_train),axis=1))
+data2=shuffle(data)
 
-### SIMPLE NEURAL NETS WITH VARIABLE SELECTION
+X_train2=np.array(data2.ix[:,0:3])
+Y_train=np.array(pd.get_dummies(data2.ix[:,4]))
+
 sgd = SGD(lr=learning_rate,momentum=momentum, decay=decay_rate, nesterov=False)
 
 model_left=Sequential()
@@ -70,7 +74,7 @@ model2.add(Dense(5))
 model2.add(BatchNormalization(mode=2))
 model2.add(Activation('relu'))
 model2.add(Dense(3))
-model2.add(Activation('sigmoid'))
+model2.add(Activation('relu'))
 model2.add(Dense(4))
 
 for i in range(0,6):
@@ -85,7 +89,7 @@ model_right2.add(BatchNormalization(mode=2))
 
 model22=Sequential()
 model22.add(Merge([model2,model_right2],mode = 'concat'))
-model22.add(Activation('sigmoid'))
+model22.add(Activation('relu'))
 model22.add(Reshape((8,)))
 model22.add(Dense(5))
 model22.add(BatchNormalization(mode=2))
@@ -97,18 +101,11 @@ model22.compile(loss = 'binary_crossentropy', optimizer = sgd, metrics = ['accur
 model22.summary()
 
 model22.fit([X_train2,X_train2,X_train2], Y_train, 
-           batch_size = 30, nb_epoch = 300, verbose = 1)
+           batch_size = 30, nb_epoch = 1000, verbose = 1,validation_split=0.9)
 
-### HAVIA ERRO DEVIDO BATCH SIZE
-res22 = model22.predict_classes([X_train2,X_train2,X_train2],batch_size = 150)
-acc22=((res22-iris.target)==0).sum()/len(res22)
+res22 = model22.predict_classes([X_train2,X_train2,X_train2],batch_size = 30)
+acc22=((res22-data2.ix[:,4])==0).sum()/len(res22)
 acc22
-
-
-
-
-
-'''pip install pydot-ng + download Graphviz'''
 
 import pydot
 import graphviz
