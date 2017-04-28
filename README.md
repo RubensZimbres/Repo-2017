@@ -123,7 +123,3 @@ Keras version used in models: keras==1.1.0
 <img src=https://github.com/RubensZimbres/Repo-2017/blob/master/Pictures%20-%20Formulas/RESNET_Me.jpg?raw=true>
 </p>
 
-<p align="center">
-<img src=https://github.com/RubensZimbres/Repo-2017/blob/master/Pictures%20-%20Formulas/VAE+DAE.jpg?raw=true>
-</p>
-
