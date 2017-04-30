@@ -100,7 +100,7 @@ gan_level2 = recog11(recog1(gan_input))
 GAN = Model(gan_input, gan_level2)
 GAN.compile(loss='mean_squared_error', optimizer='adam',metrics = ['mae'])
 
-GAN.fit(x_train[0].reshape(1,784), x_train[0].reshape((1,784)), 
+GAN.fit(x_train_orig[0].reshape(1,784), x_train_orig[0].reshape((1,784)), 
         batch_size=30, nb_epoch=100,verbose=1)
 
 ### UNIQUE BLUEPRINT
