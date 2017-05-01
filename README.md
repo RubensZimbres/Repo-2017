@@ -6,7 +6,7 @@ Codes in NLP, Deep Learning, Reinforcement Learning and Artificial Intelligence
 
 I am a Data Scientist and I code in R, Python and Wolfram Mathematica. Here you will find some Machine Learning, Deep Learning, Natural Language Processing and Artificial Intelligence models I developed.
 
-<b> Outputs of the models can be seen at my portfolio: </b> https://www.slideshare.net/RubensZimbres/portfolio-82-2017
+<b> Outputs of the models can be seen at my portfolio: </b> https://drive.google.com/file/d/0B0RLknmL54khdjRQWVBKeTVxSHM/view?usp=sharing
 
 ----------------
 Keras version used in models: keras==1.1.0
