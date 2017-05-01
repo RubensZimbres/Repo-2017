@@ -80,7 +80,7 @@ recog1.add(Merge([recog_left,recog_right],mode = 'ave'))
 recog1.add(Dense(784))
 recog1.add(Activation('relu'))
 
-#### HERE***
+#### GATE***
 recog11=Sequential()
 layer=Dense(2,init='glorot_uniform',input_shape=(784,))
 layer.trainable=False
