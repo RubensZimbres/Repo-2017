@@ -4,7 +4,6 @@
 import matplotlib.pyplot as plt
 import pandas as pd
 import numpy as np
-from sklearn.svm import SVR     
 from sklearn.utils import shuffle
 
 aa0=pd.read_csv('/Volumes/16 DOS/Python/Kaggle Russian House/train.csv',sep=',',header=0)
@@ -27,9 +26,6 @@ for i in np.where(np.array(categoricals)==1)[0]:
 missing=np.where(np.array([df.ix[:,i].isnull().sum()/df.shape[0] for i in range(0,df.shape[1])])>.15)[0]
 
 df2=df.drop(df[missing],axis=1)
-
-[np.mean(df2.ix[:,i]) for i in range(0,df2.shape[1])]
-#### ATE AQUI OK
 
 ss=[]
 for i in range(0,df2.shape[1]):
@@ -56,8 +52,6 @@ selected=p2[1:4]
 
 X_train0=df2.ix[:,selected].astype(np.float64)
 Y_train0=df2.ix[:,259].astype(np.float64)
-
-### ATE AQUI PERFEITO
 
 end=int(X_train0.shape[0]*.8)
 X_train=X_train0[0:end]
@@ -113,7 +107,6 @@ aa02=pd.read_csv('/Volumes/16 DOS/Python/Kaggle Russian House/macro.Me2.csv',sep
 ab2.shape
 
 df3=pd.merge(ab2, aa02, how='left', on='timestamp')
-###### COPY ABOVE
 
 categoricals=[]
 for i in range(0,df3.shape[1]):
@@ -131,9 +124,6 @@ missing=np.where(np.array([df3.ix[:,i].isnull().sum()/df3.shape[0] for i in rang
 df2=df3.drop(df3[missing],axis=1)
 
 [np.mean(df2.ix[:,i]) for i in range(0,df2.shape[1])]
-#### ATE AQUI OK
-
-part
 
 for i in part:
     for j in range(0,df2.shape[1]):
