@@ -1,1 +1,152 @@
-### TO BE UPLOADED AFTER June 29, 2017
+
+### CURRENT EFFORTS IN May 07, 2017
+
+import matplotlib.pyplot as plt
+import pandas as pd
+import numpy as np
+from sklearn.svm import SVR     
+from sklearn.utils import shuffle
+
+aa0=pd.read_csv('/Volumes/16 DOS/Python/Kaggle Russian House/train.csv',sep=',',header=0)
+aa02=pd.read_csv('/Volumes/16 DOS/Python/Kaggle Russian House/macro.Me2.csv',sep=',',header=0)
+
+df=pd.merge(aa0, aa02, how='left', on='timestamp')
+df.columns.get_loc("price_doc")
+
+categoricals=[]
+for i in range(0,df.shape[1]):
+    if df.ix[:,i].dtype=='object':
+        categoricals.append(1)
+    else:
+        categoricals.append(0)
+        
+for i in np.where(np.array(categoricals)==1)[0]:
+    df.ix[:,i] = pd.Categorical(df.ix[:,11])
+    df.ix[:,i] = df.ix[:,i].cat.codes
+
+missing=np.where(np.array([df.ix[:,i].isnull().sum()/df.shape[0] for i in range(0,df.shape[1])])>.15)[0]
+
+df2=df.drop(df[missing],axis=1)
+
+[np.mean(df2.ix[:,i]) for i in range(0,df2.shape[1])]
+#### ATE AQUI OK
+
+ss=[]
+for i in range(0,df2.shape[1]):
+    ss.append(df2.ix[:,i].dtype)
+
+correla=df2.corr()
+
+part=np.where(np.array(correla.ix[:,259])>.25)[0]
+for i in part: print(i,st[i])
+
+for i in part:
+    for j in range(0,df2.shape[1]):
+        df2[str('engineer'+str(i)+str(j))]=df2.ix[:,i]*df2.ix[:,j]
+
+df_final=df2
+st2=[]
+for i in range(0,df_final.shape[1]):
+    print(i,np.corrcoef(df_final.ix[:,i],df_final['price_doc'])[0][1])
+    st2.append(np.corrcoef(df_final.ix[:,i],df_final['price_doc'])[0][1])
+
+
+p2=np.where(np.array(st2)>.5)[0]
+selected=p2[1:4]
+
+X_train0=df2.ix[:,selected].astype(np.float64)
+Y_train0=df2.ix[:,259].astype(np.float64)
+
+### ATE AQUI PERFEITO
+
+end=int(X_train0.shape[0]*.8)
+X_train=X_train0[0:end]
+Y_train=Y_train0[0:end]
+X_test=X_train0[end+1:X_train0.shape[0]]
+Y_test=Y_train0[end+1:X_train0.shape[0]]
+
+from sklearn.ensemble import GradientBoostingRegressor
+
+model = GradientBoostingRegressor(loss='ls', \
+learning_rate=0.1, n_estimators=100, subsample=1, 
+min_samples_split=10, min_samples_leaf=10, \
+min_weight_fraction_leaf=0.0, max_depth=100,\
+ init=None, random_state=None, max_features=X_train.shape[1], alpha=0.9, \
+ verbose=1, max_leaf_nodes=10, warm_start=False,)
+
+model.fit(X_train, Y_train)
+
+#### FOR TRAIN
+pred0=model.predict(X_train)
+
+error=np.mean(abs(pred0-Y_train))/len(Y_train)
+p1=np.log(pred0+1)
+r1=np.log(Y_train+1)
+where_are_NaNsp1 = np.isnan(p1)
+where_are_NaNsr1 = np.isnan(r1)
+p1[where_are_NaNsp1] = 0.003
+r1[where_are_NaNsr1] = 0.003
+
+RMSLE=np.sqrt(np.sum((p1-r1)**2)/len(Y_train))
+print('RMSLE=',RMSLE,'error=',error)
+
+#### FOR TEST
+pred01=model.predict(X_test)
+
+error1=np.mean(abs(pred01-Y_test))/len(Y_test)
+p11=np.log(pred01+1)
+r11=np.log(Y_test+1)
+where_are_NaNsp11 = np.isnan(p11)
+where_are_NaNsr11 = np.isnan(r11)
+p11[where_are_NaNsp11] = 0.003
+r11[where_are_NaNsr11] = 0.003
+
+RMSLE=np.sqrt(np.sum((p11-r11)**2)/len(Y_test))
+print('RMSLE=',RMSLE,'error=',error)
+
+plt.plot(np.sort(pred0))
+plt.plot(np.sort(Y_train))
+plt.show()
+
+ab2=pd.read_csv('/Volumes/16 DOS/Python/Kaggle Russian House/RussianHouse_test.csv',sep=',',header=0)
+aa02=pd.read_csv('/Volumes/16 DOS/Python/Kaggle Russian House/macro.Me2.csv',sep=',',header=0)
+ab2.shape
+
+df3=pd.merge(ab2, aa02, how='left', on='timestamp')
+###### COPY ABOVE
+
+categoricals=[]
+for i in range(0,df3.shape[1]):
+    if df3.ix[:,i].dtype=='object':
+        categoricals.append(1)
+    else:
+        categoricals.append(0)
+        
+for i in np.where(np.array(categoricals)==1)[0]:
+    df3.ix[:,i] = pd.Categorical(df3.ix[:,11])
+    df3.ix[:,i] = df3.ix[:,i].cat.codes
+
+missing=np.where(np.array([df3.ix[:,i].isnull().sum()/df3.shape[0] for i in range(0,df3.shape[1])])>.15)[0]
+
+df2=df3.drop(df3[missing],axis=1)
+
+[np.mean(df2.ix[:,i]) for i in range(0,df2.shape[1])]
+#### ATE AQUI OK
+
+part
+
+for i in part:
+    for j in range(0,df2.shape[1]):
+        df2[str('engineer'+str(i))]=df2.ix[:,i]*df2.ix[:,j]
+
+[df_final['engineer2'],df_final['engineer17'],df_final['engineer188']]
+
+X_test=df_final.ix[:,selected_ok].astype(np.float64)
+
+pred=model.predict(X_test)
+
+id0=df3.ix[:,0]
+
+cc=np.array([np.array(id0),pred]).T
+
+np.savetxt("Kaggle_Fix_.csv", cc, delimiter=',', header='id,price_doc', fmt = '%10i, %10f', comments='')
