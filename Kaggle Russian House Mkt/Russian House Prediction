@@ -53,8 +53,8 @@ st2=[]
 for i in range(0,df2.shape[1]):
     st2.append(np.corrcoef(df2.ix[:,i],df2['price_doc'])[0][1])
 
-## PICK VARIABLES WITH CORRELATION BIGGER THAN .6
-p2=np.where(np.array(st2)>.6)[0]
+## PICK VARIABLES WITH CORRELATION BIGGER THAN .4
+p2=np.where(np.array(st2)>.4)[0]
 df2.columns.get_loc("price_doc")
 best=p2[1:len(p2)]
 df24=df2
