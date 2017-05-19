@@ -6,8 +6,8 @@ import pandas as pd
 import numpy as np
 from sklearn.utils import shuffle
 
-aa0=pd.read_csv('/Volumes/16 DOS/Python/Kaggle Russian House/Selected Best/train.csv',sep=',',header=0)
-aa02=pd.read_csv('/Volumes/16 DOS/Python/Kaggle Russian House/Selected Best/macro.csv',sep=',',header=0)
+aa0=pd.read_csv('/Kaggle Russian House/train.csv',sep=',',header=0)
+aa02=pd.read_csv('/Kaggle Russian House/macro.csv',sep=',',header=0)
 
 ## MERGE DATABASES
 df=pd.merge(aa0, aa02, how='left', on='timestamp')
@@ -215,4 +215,4 @@ id0=df3.ix[:,0]
 cc=np.array([np.array(id0),pred]).T
 
 ## SEND TO KAGGLE
-np.savetxt("/Volumes/16 DOS/Python/Kaggle Russian House/Selected Best/COMPLETO_Norm.csv", cc, delimiter=',', header='id,price_doc', fmt = '%10i, %10f', comments='')
+np.savetxt("/Kaggle Russian House/COMPLETO_Norm.csv", cc, delimiter=',', header='id,price_doc', fmt = '%10i, %10f', comments='')
