@@ -4,7 +4,6 @@
 import matplotlib.pyplot as plt
 import pandas as pd
 import numpy as np
-from sklearn.svm import SVR     
 from sklearn.utils import shuffle
 
 aa0=pd.read_csv('/Volumes/16 DOS/Python/Kaggle Russian House/Selected Best/train.csv',sep=',',header=0)
