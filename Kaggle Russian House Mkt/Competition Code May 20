@@ -1,0 +1,211 @@
+import matplotlib.pyplot as plt
+import pandas as pd
+import numpy as np
+from sklearn.utils import shuffle
+
+aa0=pd.read_csv('/Volumes/16 DOS/Python/Kaggle Russian House/Old/Selected Best/train.csv',sep=',',header=0)
+aa02=pd.read_csv('/Volumes/16 DOS/Python/Kaggle Russian House/Old/Selected Best/macro.csv',sep=',',header=0)
+
+## MERGE DATABASES
+df=pd.merge(aa0, aa02, how='left', on='timestamp')
+df.columns.get_loc("price_doc")
+df=shuffle(df)
+
+## DROP COLUMNS WITH NUMBER OF MISSING VALUES GREATER THAN 15%
+miss=[df.ix[:,i].isnull().sum()/df.shape[0] for i in range(0,df.shape[1])]
+delete=np.where(np.array(miss)>.15)[0]
+
+df2=df.drop(df.columns[delete], axis=1)
+
+## TURN NOMINAL VARIABLES INTO NUMERICAL ONES
+categoricals=[]
+for i in range(0,df2.shape[1]):
+    if df2.ix[:,i].dtype=='object':
+        categoricals.append(1)
+    else:
+        categoricals.append(0)
+        
+for i in np.where(np.array(categoricals)==1)[0]:
+    df2.ix[:,i] = pd.Categorical(df2.ix[:,i])
+    df2.ix[:,i] = df2.ix[:,i].cat.codes
+
+## REPLACE MISSING VALUES WITH MEAN
+for i in range(0,df2.shape[1]):
+    df2.ix[:,i]=df2.ix[:,i].fillna(df2.ix[:,i].mean())
+
+## CHECK CORRELATIONS
+ab=df2.corr()
+
+df2.columns.get_loc("price_doc")
+part0=np.where(np.array(ab[[259]])>.28)[0]
+range0=np.delete(range(0,df2.shape[1]),259)
+
+## FEATURE ENGINEERING
+for i in part0[0:4]:
+    for j in range0:
+        df2[str('engineer'+str(i)+'x'+str(j))]=df2.ix[:,i]*df2.ix[:,j]
+
+## CHECK CORRELATIONS
+st2=[]
+for i in range(0,df2.shape[1]):
+    st2.append(np.corrcoef(df2.ix[:,i],df2['price_doc'])[0][1])
+
+p2=np.where(np.array(st2)>.4)[0]
+df2.columns.get_loc("price_doc")
+best=p2[1:len(p2)]
+df24=df2
+
+X_train0=df24.ix[:,best].astype(np.float64)
+Y_train0=df24.ix[:,df2.columns.get_loc("price_doc")].astype(np.float64)
+
+## REMOVE OUTLIERS
+thre=5
+out1=np.where(Y_train0>thre*np.std(Y_train0))[0]
+out=[]
+for i in range(0,X_train0.shape[1]):
+    out.append(np.where(X_train0.ix[:,i]>thre*np.std(X_train0.ix[:,i]))[0])
+out2=np.concatenate(out,axis=0)
+delete=np.unique(np.concatenate((out1,out2),axis=0))
+len(np.unique(np.concatenate(out,axis=0)))
+
+X_train1=X_train0.drop(delete)
+Y_train1=Y_train0.drop(delete)
+
+end=int(Y_train1.shape[0]*.8)
+
+def norm(x):
+    return (x-np.min(x))/(np.max(x)-np.min(x))
+
+## APPLY NORMALIZATION AND LOGARITHMIC SCALE
+for i in range(0,X_train1.shape[1]):
+    X_train1.ix[:,i]=X_train1.ix[:,i].replace(0,0.000001)
+    X_train1.ix[:,i]=norm(np.log10(X_train1.ix[:,i]))
+
+Y_train1=Y_train1.replace(0,0.000001)
+Y_train1=np.log10(Y_train1)
+
+## DEFINE TRAINING SET AND VALIDATION SET
+X_train=X_train1[0:end]
+Y_train=Y_train1[0:end]
+X_test0=X_train1[end+1:len(Y_train1)]
+Y_test=Y_train1[end+1:len(Y_train1)]
+
+from sklearn.ensemble import GradientBoostingRegressor
+
+model = GradientBoostingRegressor(loss='ls', \
+learning_rate=0.73, n_estimators=100, subsample=1, 
+min_samples_split=200, min_samples_leaf=80, \
+min_weight_fraction_leaf=0.0, max_depth=150,\
+ init=None, random_state=None, max_features=X_train.shape[1], alpha=0.9, \
+ verbose=1, max_leaf_nodes=None, warm_start=False,)
+
+model.fit(X_train, Y_train)
+
+      Iter       Train Loss   Remaining Time 
+         1           0.0436           22.35s
+         2           0.0392           23.76s
+         3           0.0370           24.55s
+         4           0.0350           25.85s
+         5           0.0334           28.04s
+         6           0.0318           28.13s
+         7           0.0305           28.91s
+         8           0.0292           29.33s
+         9           0.0281           29.16s
+        10           0.0270           28.76s
+        20           0.0187           27.04s
+        30           0.0135           24.23s
+        40           0.0101           21.52s
+        50           0.0076           18.07s
+        60           0.0059           14.48s
+        70           0.0046           10.93s
+        80           0.0037            7.27s
+        90           0.0030            3.66s
+       100           0.0024            0.00s
+
+pred0=model.predict(X_train)
+
+error=np.mean(abs(pred0-Y_train))/len(Y_train)
+p1=np.log(pred0+1)
+r1=np.log(Y_train+1)
+where_are_NaNsp1 = np.isnan(p1)
+where_are_NaNsr1 = np.isnan(r1)
+p1[where_are_NaNsp1] = 0.003
+r1[where_are_NaNsr1] = 0.003
+
+RMSLE=np.sqrt(np.sum((p1-r1)**2)/len(Y_train))
+
+pred02=model.predict(X_test0)
+
+error2=np.mean(abs(pred02-Y_test))/len(Y_test)
+p12=np.log(pred02+1)
+r12=np.log(Y_test+1)
+where_are_NaNsp12 = np.isnan(p12)
+where_are_NaNsr12 = np.isnan(r12)
+p12[where_are_NaNsp12] = 0.003
+r12[where_are_NaNsr12] = 0.003
+
+RMSLE2=np.sqrt(np.sum((p12-r12)**2)/len(Y_train))
+print('RMSLE train=',RMSLE,'error train=',error)
+print('RMSLE test=',RMSLE2,'error test=',error2)
+
+## RESULTS
+RMSLE train= 0.00643636496591 error train= 1.3647352914677162e-06
+RMSLE test= 0.0154017168282 error test= 2.4888337067992197e-05
+
+plt.plot(np.sort(pred0))
+plt.plot(np.sort(Y_train))
+plt.show()
+
+## TEST SET
+ab2=pd.read_csv('/Volumes/16 DOS/Python/Kaggle Russian House/RussianHouse_test.csv',sep=',',header=0)
+aa02=pd.read_csv('/Volumes/16 DOS/Python/Kaggle Russian House/Old/Selected Best/macro.csv',sep=',',header=0)
+ab2.shape
+
+## MERGE DATABASES
+df3=pd.merge(ab2, aa02, how='left', on='timestamp')
+df=df3
+
+## DELETE COLUMNS WHERE MISSING VALUES ARE GREATER THAN 15%
+miss=[df.ix[:,i].isnull().sum()/df.shape[0] for i in range(0,df.shape[1])]
+delete=np.where(np.array(miss)>.15)[0]
+
+df2=df.drop(df.columns[delete], axis=1)
+
+## TURN NOMINAL DATA INTO NUMERICAL ONES
+categoricals=[]
+for i in range(0,df2.shape[1]):
+    if df2.ix[:,i].dtype=='object':
+        categoricals.append(1)
+    else:
+        categoricals.append(0)
+        
+for i in np.where(np.array(categoricals)==1)[0]:
+    df2.ix[:,i] = pd.Categorical(df2.ix[:,i])
+    df2.ix[:,i] = df2.ix[:,i].cat.codes
+
+## REPLACE MISSING VALUES BY MEAN
+for i in range(0,df2.shape[1]):
+    df2.ix[:,i]=df2.ix[:,i].fillna(df2.ix[:,i].mean())
+
+## FEATURE ENGINEERING
+for i in part0[0:4]:
+    for j in range0:
+        df2[str('engineer'+str(i)+'x'+str(j))]=df2.ix[:,i]*df2.ix[:,j]
+df25=df2
+
+usar=X_train.columns.values
+
+X_test=df25.ix[:,usar]
+for i in range(0,X_test.shape[1]):
+    X_test.ix[:,i]=X_test.ix[:,i].replace(0,0.000001)
+    X_test.ix[:,i]=norm(np.log10(X_test.ix[:,i]))
+
+
+## MAKE PREDICTIONS FOR TEST SET
+pred=10**model.predict(X_test)
+id0=df3.ix[:,0]
+
+cc=np.array([np.array(id0),pred]).T
+
+## SUMBIT TO KAGGLE
+np.savetxt("/Volumes/16 DOS/Python/Kaggle Russian House/MELHOR ATE AGORA/Animal.WORK_200_80.csv", cc, delimiter=',', header='id,price_doc', fmt = '%10i, %10f', comments='')
