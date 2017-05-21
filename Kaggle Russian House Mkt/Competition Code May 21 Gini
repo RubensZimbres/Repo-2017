@@ -1,0 +1,172 @@
+import matplotlib.pyplot as plt
+import pandas as pd
+import numpy as np
+from sklearn.utils import shuffle
+
+aa0=pd.read_csv('/Kaggle Russian House/Old/Selected Best/train.csv',sep=',',header=0)
+aa02=pd.read_csv('/Kaggle Russian House/Old/Selected Best/macro.csv',sep=',',header=0)
+
+df=pd.merge(aa0, aa02, how='left', on='timestamp')
+place_y=df.columns.get_loc("price_doc")
+df=shuffle(df)
+
+miss=[df.ix[:,i].isnull().sum()/df.shape[0] for i in range(0,df.shape[1])]
+delete=np.where(np.array(miss)>.15)[0]
+
+df2=df.drop(df.columns[delete], axis=1)
+
+categoricals=[]
+for i in range(0,df2.shape[1]):
+    if df2.ix[:,i].dtype=='object':
+        categoricals.append(1)
+    else:
+        categoricals.append(0)
+        
+for i in np.where(np.array(categoricals)==1)[0]:
+    df2.ix[:,i] = pd.Categorical(df2.ix[:,i])
+    df2.ix[:,i] = df2.ix[:,i].cat.codes
+
+for i in range(0,df2.shape[1]):
+    df2.ix[:,i]=df2.ix[:,i].fillna(df2.ix[:,i].mean())
+
+gini=[]
+for i in range(0,df2.shape[1]):
+    gini.append((df2.shape[0]+1-2*(np.sum((df2.shape[0]+1-df2.ix[:,i])*df2.ix[:,place_y])/np.sum(df2.ix[:,place_y])))/df2.shape[0])
+
+part0=np.where(np.array(np.abs(gini))<.2)[0]
+
+for i in part0[1:7]:
+    for j in part0[1:7]:
+        df2[str('engineer'+str(i)+'x'+str(j))]=df2.ix[:,i]*df2.ix[:,j]
+
+gini2=[]
+for i in range(0,df2.shape[1]):
+    gini2.append((df2.shape[0]+1-2*(np.sum((df2.shape[0]+1-df2.ix[:,i])*df2.ix[:,place_y])/np.sum(df2.ix[:,place_y])))/df2.shape[0])
+
+p2=np.where(np.array(np.abs(gini))<.2)[0]
+df2.columns.get_loc("price_doc")
+best=p2[1:len(p2)]
+df24=df2
+
+X_train0=df24.ix[:,best[[0,1,2,3]]].astype(np.float64)
+Y_train0=df24.ix[:,df2.columns.get_loc("price_doc")].astype(np.float64)
+
+thre=5
+out1=np.where(Y_train0>thre*np.std(Y_train0))[0]
+delete=out1
+len(out1)
+
+X_train1=X_train0.drop(delete)
+Y_train1=Y_train0.drop(delete)
+
+end=int(Y_train1.shape[0]*.8)
+
+def norm(x):
+    return (x-np.min(x))/(np.max(x)-np.min(x))
+
+for i in range(0,X_train1.shape[1]):
+    X_train1.ix[:,i]=X_train1.ix[:,i].replace(0,0.000001)
+    X_train1.ix[:,i]=norm(np.log10(X_train1.ix[:,i]))
+
+Y_train1=Y_train1.replace(0,0.000001)
+Y_train1=np.log10(Y_train1)
+
+
+X_train=X_train1[0:end]
+Y_train=Y_train1[0:end]
+X_test0=X_train1[end+1:len(Y_train1)]
+Y_test=Y_train1[end+1:len(Y_train1)]
+
+from sklearn.ensemble import GradientBoostingRegressor
+
+model = GradientBoostingRegressor(loss='ls', \
+learning_rate=0.73, n_estimators=100, subsample=1, 
+min_samples_split=200, min_samples_leaf=80, \
+min_weight_fraction_leaf=0.0, max_depth=150,\
+ init=None, random_state=None, max_features=X_train.shape[1], alpha=0.9, \
+ verbose=1, max_leaf_nodes=None, warm_start=False,)
+
+model.fit(X_train, Y_train)
+
+pred0=model.predict(X_train)
+
+error=np.mean(abs(pred0-Y_train))/len(Y_train)
+p1=np.log(pred0+1)
+r1=np.log(Y_train+1)
+where_are_NaNsp1 = np.isnan(p1)
+where_are_NaNsr1 = np.isnan(r1)
+p1[where_are_NaNsp1] = 0.003
+r1[where_are_NaNsr1] = 0.003
+
+RMSLE=np.sqrt(np.sum((p1-r1)**2)/len(Y_train))
+
+pred02=model.predict(X_test0)
+
+error2=np.mean(abs(pred02-Y_test))/len(Y_test)
+p12=np.log(pred02+1)
+r12=np.log(Y_test+1)
+where_are_NaNsp12 = np.isnan(p12)
+where_are_NaNsr12 = np.isnan(r12)
+p12[where_are_NaNsp12] = 0.003
+r12[where_are_NaNsr12] = 0.003
+
+RMSLE2=np.sqrt(np.sum((p12-r12)**2)/len(Y_train))
+print('RMSLE train=',RMSLE,'error train=',error)
+print('RMSLE test=',RMSLE2,'error test=',error2)
+
+plt.plot(np.sort(pred0))
+plt.plot(np.sort(Y_train))
+plt.show()
+
+ab2=pd.read_csv('/Kaggle Russian House/RussianHouse_test.csv',sep=',',header=0)
+aa02=pd.read_csv('/Kaggle Russian House/Old/Selected Best/macro.csv',sep=',',header=0)
+ab2.shape
+
+df3=pd.merge(ab2, aa02, how='left', on='timestamp')
+df=df3
+miss=[df.ix[:,i].isnull().sum()/df.shape[0] for i in range(0,df.shape[1])]
+delete=np.where(np.array(miss)>.15)[0]
+
+df2=df.drop(df.columns[delete], axis=1)
+
+categoricals=[]
+for i in range(0,df2.shape[1]):
+    if df2.ix[:,i].dtype=='object':
+        categoricals.append(1)
+    else:
+        categoricals.append(0)
+        
+for i in np.where(np.array(categoricals)==1)[0]:
+    df2.ix[:,i] = pd.Categorical(df2.ix[:,i])
+    df2.ix[:,i] = df2.ix[:,i].cat.codes
+
+for i in range(0,df2.shape[1]):
+    df2.ix[:,i]=df2.ix[:,i].fillna(df2.ix[:,i].mean())
+
+for i in part0[1:7]:
+    for j in part0[1:7]:
+        df2[str('engineer'+str(i)+'x'+str(j))]=df2.ix[:,i]*df2.ix[:,j]
+df25=df2
+
+usar=X_train.columns.values
+
+X_test=df25.ix[:,usar]
+for i in range(0,X_test.shape[1]):
+    X_test.ix[:,i]=X_test.ix[:,i].replace(0,0.000001)
+    X_test.ix[:,i]=norm(np.log10(X_test.ix[:,i]))
+
+pred=10**model.predict(X_test)
+id0=df3.ix[:,0]
+
+cc=np.array([np.array(id0),pred]).T
+
+best=pd.read_csv('/Volumes/16 DOS/Python/Kaggle_Rus_12!!!!.csv',sep=',',header=0)
+
+plt.figure(figsize=(10,7))
+plt.plot(np.sort(pred),color='red')
+plt.plot(np.sort(best.ix[:,1]))
+plt.title('RED PREDICTION')
+plt.show()
+np.min(pred)
+
+np.savetxt("/Kaggle Russian House/MELHOR ATE AGORA/Animal_Gini_Yess.csv", cc, delimiter=',', header='id,price_doc', fmt = '%10i, %10f', comments='')
