@@ -15,7 +15,6 @@ model.dhp<-matrix(c("logitML2$c0_recomend<-logitML2$c0_honesto","gam0",NA,
                         "logitML2$c0_recomend<->logitML2$c0_recomend","gam4", 1),ncol=3, byrow=TRUE)
 ## covariance matrix
 R.dhp <- matrix(cov(logitML2),3, 3, byrow=TRUE)
-# nao mexe acima
 rownames(R.dhp) <- colnames(R.dhp) <-c("logitML2$c0_recomend","logitML2$c0_atencao","logitML2$c0_honesto")
 
 SEM_2<-sem(model.dhp,R.dhp,N=98,maxiter=50)
