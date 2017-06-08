@@ -15,10 +15,10 @@ from tweepy.streaming import StreamListener
 import re
 import matplotlib.animation as manimation
 comp00=[]
-consumer_key = 'yCVmaXU8ZaYAhCguDe1nzW1vR'
-consumer_secret = 'u4m1ckzS5X770Hc3AHcka0mFsN7KzbiwTXKB4QrqEgwCFEPeG6'
-access_token = '3064012217-eoFj5ynhCCQDEOSQP8CBgNBw1DyZqTOi6P1dvaT'
-access_secret = 'A47LDut4JDiqAkVmxW3DB10RqBYebbpHbC1KruCA7aF3u'
+consumer_key = '12345'
+consumer_secret = '12345'
+access_token = '12345-12345'
+access_secret = '12345'
  
 auth = OAuthHandler(consumer_key, consumer_secret)
 auth.set_access_token(access_token, access_secret)
