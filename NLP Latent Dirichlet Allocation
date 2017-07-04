@@ -242,7 +242,7 @@ X=norm(matrix3)
 tsne = manifold.TSNE(n_components=2, init='pca', random_state=0,perplexity=50,verbose=1,n_iter=1500)
 X_tsne = tsne.fit_transform(X)
 
-### WORK HERE - COMO DESCOBRI QUE TINHA 3 CLUSTERS ???? SORT X_tsne
+### WORK HERE 
 
 from sklearn.cluster import KMeans
 model3=KMeans(n_clusters=3,random_state=0)
