@@ -1,38 +1,60 @@
-# gensim
-# t-SNE = topics
-# K-Means
-
-import urllib
-from bs4 import BeautifulSoup
 import nltk
 import numpy as np
 from nltk import sent_tokenize, word_tokenize, pos_tag
 import matplotlib.pyplot as plt
 from pylab import *
-url="https://en.wikipedia.org/wiki/Statistical_inference"
-html = urllib.request.urlopen(url).read()
-soup = BeautifulSoup(html)
+from bs4 import BeautifulSoup
+from nltk import sent_tokenize, word_tokenize, pos_tag
+import nltk
+import numpy as np
+import matplotlib.pyplot as plt
 
-###### SEMANTIC
-texto=[]
-for string in soup.stripped_strings:
-    texto.append(repr(string))
 
-texto
+import tweepy
+from tweepy import OAuthHandler
+from tweepy import Stream
+from tweepy.streaming import StreamListener
+import re
+ 
+consumer_key = '12345'
+consumer_secret = '12345'
+access_token = '123-12345'
+access_secret = '12345'
+ 
+auth = OAuthHandler(consumer_key, consumer_secret)
+auth.set_access_token(access_token, access_secret)
+ 
+api = tweepy.API(auth)
 
-# kill all script and style elements
-for script in soup(["script", "style"]):
-    script.extract()    # rip it out
+number_tweets=200
+data=[]
+for status in tweepy.Cursor(api.user_timeline,id="cnn").items(number_tweets):
+    try:
+        URLless_string = re.sub(r'\w+:\/{2}[\d\w-]+(\.[\d\w-]+)*(?:(?:\/[^\s/]*))*', '', status.text)
+        print(URLless_string,'\n')
+        data.append(URLless_string)
+    except:
+        pass
 
-# get text
-text = soup.get_text()
-text
+number_tweets=250
+data=[]
+for status in tweepy.Cursor(api.search,q="overthinking").items(number_tweets):
+    try:
+        URLless_string = re.sub(r'\w+:\/{2}[\d\w-]+(\.[\d\w-]+)*(?:(?:\/[^\s/]*))*', '', status.text)
+        print(URLless_string,'\n')
+        data.append(URLless_string)
+    except:
+        pass
 
-sentences = sent_tokenize(text)
-sentences2=sentences[20:300]
+### print(tweet.entities.get('hashtags')) 
+
+text=data
+
+sentences = sent_tokenize(str(text))
+sentences2=sentences
 sentences2
 
-tokens = word_tokenize(text)
+tokens = word_tokenize(str(text))
 tokens
 len(tokens)
 
@@ -40,7 +62,7 @@ tagged_tokens = pos_tag(tokens)
 tagged_tokens
 
 ## NOUNS
-text2 = word_tokenize(text)
+text2 = word_tokenize(str(text))
 is_noun = lambda pos: pos[:2] == 'NN'
 b=nltk.pos_tag(text2)
 b
@@ -69,7 +91,7 @@ plt.figure(figsize=(9,9))
 barh(pos,val, align='center',alpha=0.7,color='blue')
 yticks(pos, names0)
 xlabel('Mentions')
-title([soup.title.string,'Nouns'])
+title(['Nouns'])
 grid(True)
 
 
@@ -91,7 +113,7 @@ sc = set(chars_to_remove)
 
 
 V = set(text)
-long_words = [w for w in tokens if 5<len(w) < 10]
+long_words = [w for w in tokens if 4<len(w) < 13]
 sorted(long_words)
 
 text2 = nltk.Text(word.lower() for word in long_words)
@@ -100,7 +122,7 @@ print(text2.similar('wound'))
 
 fdist1 = nltk.FreqDist(long_words)
 fdist1
-a=fdist1.most_common(40)
+a=fdist1.most_common(15)
 a
 
 names=[]
@@ -111,14 +133,13 @@ for i in range(0,len(a)):
 names.reverse()
 value.reverse()
 val = value    # the bar lengths
-pos = arange(40)+.5    # the bar centers on the y axis
+pos = arange(15)+.5    # the bar centers on the y axis
 pos
 
 plt.figure(figsize=(9,9))
-barh(pos,val, align='center',alpha=0.7,color='blue')
+barh(pos,val, align='center',alpha=0.7,color='rgbcmyk')
 yticks(pos, names)
 xlabel('Mentions')
-title(soup.title.string)
 grid(True)
 
 
@@ -145,12 +166,17 @@ import logging
 logging.basicConfig(format='%(asctime)s : %(levelname)s : %(message)s', level=logging.INFO)
 import matplotlib.pyplot as plt
 from gensim import corpora
-documents = sentences2
+from string import punctuation
+def strip_punctuation(s):
+    return ''.join(c for c in s if c not in punctuation)
+
+documents=[strip_punctuation(re.sub(r'\w+:\/{2}[\d\w-]+(\.[\d\w-]+)*(?:(?:\/[^\s/]*))*', '',sentences2[i])) for i in range(0,len(sentences2))]
+
 
 # remove common words and tokenize
-stoplist = set('for a of the and to in'.split())
+stoplist = set('for a of the and to in is the he she on i will it its us as that at who be '.split())
 texts = [[word for word in document.lower().split() if word not in stoplist]
-    for document in documents]
+    for document in long_words]
 texts
 # remove words that appear only once
 from collections import defaultdict
@@ -185,7 +211,7 @@ corpus_tfidf = tfidf[corpus]
 for doc in corpus_tfidf:
     print(doc)
 
-lsi = models.LsiModel(corpus_tfidf, id2word=dictionary, num_topics=2) # initialize an LSI transformation
+lsi = models.LsiModel(corpus_tfidf, id2word=dictionary, num_topics=2)
 corpus_lsi = lsi[corpus_tfidf] # create a double wrapper over the original corpus: bow->tfidf->fold-in-lsi
 
 lsi.print_topics(2)
@@ -228,7 +254,7 @@ import matplotlib.colors as colors
 import matplotlib.cm as cmx
 import matplotlib as mpl
 
-matrix1 = gensim.matutils.corpus2dense(p, num_terms=2)
+matrix1 = gensim.matutils.corpus2dense(p, num_terms=4)
 matrix3=matrix1.T
 matrix3
 
@@ -239,25 +265,54 @@ def norm(x):
 
 X=norm(matrix3)
 
-tsne = manifold.TSNE(n_components=2, init='pca', random_state=0,perplexity=50,verbose=1,n_iter=1500)
+tsne = manifold.TSNE(n_components=2, init='pca', random_state=0,perplexity=50,verbose=1,n_iter=1500,method='exact')
 X_tsne = tsne.fit_transform(X)
 
-### WORK HERE 
+### WORK HERE - COMO DESCOBRI QUE TINHA 3 CLUSTERS ???? SORT X_tsne
+## DEFINE K-MEANS
+plt.hist(X_tsne)
 
 from sklearn.cluster import KMeans
-model3=KMeans(n_clusters=3,random_state=0)
+model3=KMeans(n_clusters=4,random_state=0)
 model3.fit(X_tsne)
 cc=model3.predict(X_tsne)
 
+## ALSO TRY COM X PARA VER QUE TOPICO SELECIONA
+
+tokens2 = word_tokenize(str(sentences2))
+tokens2
+
+long_words12 = [w for w in tokens2 if len(w) > 6]
+sorted(long_words12)
+fdist012 = nltk.FreqDist(long_words12)
+a12=fdist012.most_common(5)
+
+from matplotlib.colors import LinearSegmentedColormap
+
 print('TOPIC 1\n')
+
+print(a12,'\n')
 
 for i in np.where(cc==2)[0][2:10]:
     print(i,sentences2[i])
-from matplotlib.colors import LinearSegmentedColormap
-colors = [(1, 0, 0), (0, 1, 0), (0, 0, 1)] 
+
+n_classes=4
+colors = [(1, 0, 0), (0, 1, 0), (0, 0, 1),(0,0,0)] 
 cm = LinearSegmentedColormap.from_list(
-        cc, colors, N=3)
+        cc, colors, N=4)
+cor=[colors[cc[i]] for i in range(0,len(cc))]
+
+h=[]
+label=[]
 fig = plt.figure(figsize=(8,4))
-plt.title('DOCUMENT CLASSIFICATION\n\n'+'LATENT DIRICHLET ALLOCATION at page:  '+str(soup.title.string),fontweight="bold")
-plt.scatter(X_tsne[:, 0], X_tsne[:, 1], c=cc,cmap=cm,marker='o', s=200)
+plt.title('NATURAL LANGUAGE PROCESSING\n\n'+'TOPIC MODELING at TWITTER page: '+'#overthinking',fontweight="bold")
+for i in range(0,4):
+    label.append('Topic {}'.format([0,1,2,3][i]))
+    plt.scatter(X_tsne[:, 0], X_tsne[:, 1],c=cc,cmap=cm,marker='o',s=100)
+    h1,=plt.plot(1,1,color=colors[i],linewidth=3)
+    h.append(h1)
+plt.legend(h,label,loc="upper left")
 plt.show()
+
+model = models.LdaModel(corpus, id2word=dictionary, num_topics=4)
+model.print_topics(4)
