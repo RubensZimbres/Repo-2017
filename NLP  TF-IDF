@@ -1,0 +1,45 @@
+doc_complete = ["Human machine interface for lab abc computer applications",
+             "A survey of user opinion of computer system response time",
+              "The EPS user interface management system",
+              "System and human system engineering testing of EPS",
+              "Relation of user perceived response time to error measurement",
+              "The generation of random binary unordered trees",
+              "The intersection graph of paths in trees",
+              "Graph minors IV Widths of trees and well quasi ordering"]
+
+
+doc_clean = [doc.split() for doc in doc_complete]
+
+from sklearn.feature_extraction.text import TfidfVectorizer
+
+obj =  TfidfVectorizer(input=doc_clean, analyzer='word', ngram_range=(1,6),
+                       lowercase=True,min_df = .25,use_idf=False,
+                       stop_words = 'english')
+corpus = doc_complete
+X = obj.fit_transform(corpus)
+print(X)
+names=obj.get_feature_names()
+
+from scipy.sparse.csr import csr_matrix
+import pandas as pd
+import nltk
+w1=[]
+def get_details(doc):
+    feature_index = X[doc,:].nonzero()[1]
+    tfidf_scores = zip(feature_index, [X[doc, x] for x in feature_index])
+    for w, s in [(names[i], s) for (i, s) in tfidf_scores]:
+            print(w, s)
+            w1.append(w)
+
+for i in range(0,len(doc_complete)):
+    print('\n',doc_complete[i])
+    get_details(i)
+
+pd.Series(w1).value_counts()
+
+freq=nltk.FreqDist(w1)
+list(freq.keys()) 
+list(freq.values()) 
+
+subst=freq.most_common(5)
+subst
