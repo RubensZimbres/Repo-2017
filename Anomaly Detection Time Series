@@ -1,0 +1,27 @@
+X = np.sort(25 * np.random.rand(150, 1), axis=0)
+y = np.sin(X).ravel()
+y[::5] += 3 * (0.5 - np.random.rand(30))
+
+from sklearn.svm import SVR     
+model = SVR(kernel='rbf', C=1e3, gamma=.1)
+
+y_rbf = model.fit(X, y).predict(X)
+
+## 98% Confidence Interval
+
+error=y_rbf-y
+sup=np.mean(error)+2.33*np.std(error)
+inf=np.mean(error)-2.33*np.std(error)
+anomalies=np.concatenate([np.where(error>sup)[0],np.where(error<inf)[0]])
+
+lw = 3
+plt.figure(figsize=(9,5))
+plt.scatter(X, y, color='lawngreen', label='data')
+plt.scatter(X[anomalies], y[anomalies], marker='*',color='red', label='anomaly',s=120)
+plt.hold('on')
+plt.plot(X, y_rbf, color='navy', label='Curve')
+plt.xlabel('data')
+plt.ylabel('target')
+plt.title('Gradient Boosting Regressor')
+plt.legend(loc=3,frameon=False)
+plt.show()
