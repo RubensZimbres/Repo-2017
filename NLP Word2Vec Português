@@ -39,10 +39,12 @@ from sklearn.metrics.pairwise import cosine_similarity
 for i in range(0,9):
     print(i,documents[i])
 
-### SEM PREPOSIÇÃO DE A ETC
+### SEM PREP
 
-r=[model[x] for x in "tempo de resposta usuário".lower().split()]
+frase="tempo de resposta da medição"
+r=[model.wv[x] for x in frase.lower().split()]
 
 import numpy as np
+print('\n',frase,'\n')
 for i in range(0,9):
-    print(i,np.sum(cosine_similarity(r,ff[i])))
+    print(i,np.sum(cosine_similarity(r,ff[i])),documents[i])
