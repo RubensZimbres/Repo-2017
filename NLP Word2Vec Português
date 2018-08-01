@@ -1,6 +1,6 @@
 import logging
 logging.basicConfig(format='%(asctime)s : %(levelname)s : %(message)s', level=logging.INFO)
-
+import matplotlib.pyplot as plt
 from gensim import corpora
 documents = ["Interface máquina humana para aplicações computacionais de laboratório abc",
               "Um levantamento da opinião do usuário sobre o tempo de resposta do sistema informático",
@@ -8,8 +8,8 @@ documents = ["Interface máquina humana para aplicações computacionais de labo
                "Sistema e testes de engenharia de sistemas humanos de EPS",
                "Relação do tempo de resposta percebido pelo usuário para a medição de erro",
                "A geração de árvores não ordenadas binárias aleatórias",
-               "O gráfico de interseção dos caminhos nas árvores",
-               "Gráfico de menores IV Largura de árvores e bem quase encomendado",
+               "O gráfico de interseção dos caminhos nas árvores personalizadas",
+               "Gráfico de menores IV Largura de árvores personalizadas e bem quase encomendado",
                "Gráficos menores Uma pesquisa"]
 
 stoplist = set('a e o para sobre'.split())
@@ -40,8 +40,10 @@ for i in range(0,9):
 
 ### Sem preposição e artigo
 
-frase="como funciona a personalização das latinhas"
-long_words = [w for w in frase.lower().split() if len(w)>3]
+frase="como funciona a personalização de árvores"
+long_words = [w for w in frase.lower().split() if len(w)>1]
+
+model.most_similar(positive=long_words)
 
 r=[model.wv[x] for x in long_words]
 
