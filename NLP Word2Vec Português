@@ -40,10 +40,9 @@ for i in range(0,9):
 
 ### Sem preposição e artigo
 
-frase="como funciona a personalização de árvores"
-long_words = [w for w in frase.lower().split() if len(w)>1]
+frase="quero uma customização de árvores"
+long_words = [w for w in frase.lower().split() if len(w)>3]
 
-model.most_similar(positive=long_words)
 
 r=[model.wv[x] for x in long_words]
 
