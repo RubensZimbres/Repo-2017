@@ -38,7 +38,7 @@ from sklearn.metrics.pairwise import cosine_similarity
 for i in range(0,9):
     print(i,documents[i])
 
-### SEM PREP
+### Sem preposição e artigo
 
 frase="tempo de resposta da medição"
 r=[model.wv[x] for x in frase.lower().split()]
