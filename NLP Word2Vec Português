@@ -22,7 +22,6 @@ long_words1 = [[w for w in texts[i] if len(w)>4] for i in range(0,9)]
 import gensim
 from gensim.corpora import  WikiCorpus
 from gensim.models import Word2Vec
-from gensim.models.word2vec import LineSentence
 
 outp = "/home/rubens/Documents/Python/Wikipedia/wiki.pt-br.word2vec.model"
 
