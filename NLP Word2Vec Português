@@ -1,0 +1,48 @@
+import logging
+logging.basicConfig(format='%(asctime)s : %(levelname)s : %(message)s', level=logging.INFO)
+
+from gensim import corpora
+documents = ["Interface máquina humana para aplicações computacionais de laboratório abc",
+              "Um levantamento da opinião do usuário sobre o tempo de resposta do sistema informático",
+               "O sistema de gerenciamento de interface do usuário EPS",
+               "Sistema e testes de engenharia de sistemas humanos de EPS",
+               "Relação do tempo de resposta percebido pelo usuário para a medição de erro",
+               "A geração de árvores não ordenadas binárias aleatórias",
+               "O gráfico de interseção dos caminhos nas árvores",
+               "Gráfico de menores IV Largura de árvores e bem quase encomendado",
+               "Gráficos menores Uma pesquisa"]
+
+stoplist = set('a e o para sobre'.split())
+texts = [[word for word in document.lower().split() if word not in stoplist]
+    for document in documents]
+texts=[[x.lower() for x in texts[i]] for i in range(0,9)]
+
+long_words1 = [[w for w in texts[i] if len(w)>4] for i in range(0,9)]
+
+import gensim
+from gensim.corpora import  WikiCorpus
+from gensim.models import Word2Vec
+from gensim.models.word2vec import LineSentence
+
+outp = "/home/rubens/Documents/Python/Wikipedia/wiki.pt-br.word2vec.model"
+
+model = gensim.models.Word2Vec.load(outp)
+
+model.most_similar(positive=['rainha', 'mulher'], negative=['homem'])
+
+ff=[]
+for i in range(0,len(documents)):
+    ff.append([model[x] for x in long_words1[i]])
+
+from sklearn.metrics.pairwise import cosine_similarity
+
+for i in range(0,9):
+    print(i,documents[i])
+
+### SEM PREPOSIÇÃO DE A ETC
+
+r=[model[x] for x in "tempo de resposta usuário".lower().split()]
+
+import numpy as np
+for i in range(0,9):
+    print(i,np.sum(cosine_similarity(r,ff[i])))
